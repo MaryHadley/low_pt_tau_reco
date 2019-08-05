@@ -149,6 +149,52 @@ anti_pred = antitau_model.predict(
 )
 
 
+def arr_normalize(arr):
+    arr = np.where(arr > 1, 1, arr)
+    arr = np.where(arr < -1, -1, arr)
+    return arr
+
+
+def arr_get_angle(sin_value, cos_value):
+    sin_value = arr_normalize(sin_value)
+    cos_value = arr_normalize(cos_value)
+    return np.where(
+        sin_value > 0,
+        np.where(
+            cos_value > 0,
+            (np.arcsin(sin_value) + np.arccos(cos_value)) / 2,
+            ((np.pi - np.arcsin(sin_value)) + np.arccos(cos_value)) / 2
+        ),
+        np.where(
+            cos_value > 0,
+            (np.arcsin(sin_value) - np.arccos(cos_value)) / 2,
+            ((- np.arccos(cos_value)) - (np.pi + np.arcsin(sin_value))) / 2
+        )
+    )
+
+
+pred[:, 2] = arr_get_angle(pred[:, 2], pred[:, 3])
+pred = pred[:, 0: 3]
+
+anti_pred[:, 2] = arr_get_angle(anti_pred[:, 2], anti_pred[:, 3])
+anti_pred = anti_pred[:, 0: 3]
+
+tau_features_test[:, 2] = arr_get_angle(tau_features_test[:, 2], tau_features_test[:, 3])
+tau_features_test[:, 6] = arr_get_angle(tau_features_test[:, 6], tau_features_test[:, 7])
+tau_features_test[:, 10] = arr_get_angle(tau_features_test[:, 10], tau_features_test[:, 11])
+tau_features_test = tau_features_test[:, [0, 1, 2, 4, 5, 6, 8, 9, 10]]
+
+tau_labels_test[:, 2] = arr_get_angle(tau_labels_test[:, 2], tau_labels_test[:, 3])
+tau_labels_test = tau_labels_test[:, 0: 3]
+
+antitau_features_test[:, 2] = arr_get_angle(antitau_features_test[:, 2], antitau_features_test[:, 3])
+antitau_features_test[:, 6] = arr_get_angle(antitau_features_test[:, 6], antitau_features_test[:, 7])
+antitau_features_test[:, 10] = arr_get_angle(antitau_features_test[:, 10], antitau_features_test[:, 11])
+antitau_features_test = antitau_features_test[:, [0, 1, 2, 4, 5, 6, 8, 9, 10]]
+
+antitau_labels_test[:, 2] = arr_get_angle(antitau_labels_test[:, 2], antitau_labels_test[:, 3])
+antitau_labels_test = antitau_labels_test[:, 0: 3]
+
 # Tau plots
 plt.plot(tau_labels_test[:, 0], pred[:, 0], 'ro')
 fig1 = plt.gcf()
@@ -162,12 +208,7 @@ plt.clf()
 
 plt.plot(tau_labels_test[:, 2], pred[:, 2], 'ro')
 fig1 = plt.gcf()
-fig1.savefig('tau_sin_phi.png')
-plt.clf()
-
-plt.plot(tau_labels_test[:, 3], pred[:, 3], 'ro')
-fig1 = plt.gcf()
-fig1.savefig('tau_cos_phi.png')
+fig1.savefig('tau_phi.png')
 plt.clf()
 
 # Antitau plots
@@ -183,49 +224,18 @@ plt.clf()
 
 plt.plot(antitau_labels_test[:, 2], anti_pred[:, 2], 'ro')
 fig1 = plt.gcf()
-fig1.savefig('antitau_sin_phi.png')
+fig1.savefig('antitau_phi.png')
 plt.clf()
-
-plt.plot(antitau_labels_test[:, 3], anti_pred[:, 3], 'ro')
-fig1 = plt.gcf()
-fig1.savefig('antitau_cos_phi.png')
-plt.clf()
-
-
-def normalize_sin_cos(value):
-    if value > 1:
-        return 1
-    elif value < -1:
-        return -1
-    return value
-
-
-def get_radians_from_sin_cos(sin_value, cos_value):
-    sin_value = normalize_sin_cos(sin_value)
-    cos_value = normalize_sin_cos(cos_value)
-    if sin_value > 0 and cos_value > 0:
-        return (np.arcsin(sin_value) + np.arccos(cos_value)) / 2
-    elif sin_value > 0 > cos_value:
-        return ((np.pi - np.arcsin(sin_value)) + np.arccos(cos_value)) / 2
-    elif sin_value < 0 < cos_value:
-        return (np.arcsin(sin_value) - np.arccos(cos_value)) / 2
-    elif sin_value < 0 and cos_value < 0:
-        return ((- np.arccos(cos_value)) - (np.pi + np.arcsin(sin_value))) / 2
-
 
 for event in range(pred.shape[0]):
     tau_lorentz_no_neutrino = TLorentzVector()
 
-    for index in range(0, tau_features_test.shape[1], 4):
+    for index in range(0, tau_features_test.shape[1], 3):
         lorentz = TLorentzVector()
-        phi = get_radians_from_sin_cos(
-            tau_features_test[event][index + 2],
-            tau_features_test[event][index + 3]
-        )
         lorentz.SetPtEtaPhiM(
             tau_features_test[event][index],
             tau_features_test[event][index + 1],
-            phi,
+            tau_features_test[event][index + 2],
             0.139
         )
         tau_lorentz_no_neutrino += lorentz
@@ -243,16 +253,12 @@ for event in range(pred.shape[0]):
         tau_lorentz_no_neutrino.M(),
     )
 
-    for index in range(0, pred.shape[1], 4):
+    for index in range(0, pred.shape[1], 3):
         lorentz = TLorentzVector()
-        phi = get_radians_from_sin_cos(
-            pred[event][index + 2],
-            pred[event][index + 3]
-        )
         lorentz.SetPtEtaPhiM(
             pred[event][index],
             pred[event][index + 1],
-            phi,
+            pred[event][index + 2],
             0
         )
         tau_lorentz += lorentz
@@ -264,16 +270,12 @@ for event in range(pred.shape[0]):
 
     antitau_lorentz_no_neutrino = TLorentzVector()
 
-    for index in range(0, tau_features_test.shape[1], 4):
+    for index in range(0, tau_features_test.shape[1], 3):
         lorentz = TLorentzVector()
-        phi = get_radians_from_sin_cos(
-            antitau_features_test[event][index + 2],
-            antitau_features_test[event][index + 3]
-        )
         lorentz.SetPtEtaPhiM(
             antitau_features_test[event][index],
             antitau_features_test[event][index + 1],
-            phi,
+            antitau_features_test[event][index + 2],
             0.139
         )
         antitau_lorentz_no_neutrino += lorentz
@@ -291,16 +293,12 @@ for event in range(pred.shape[0]):
         antitau_lorentz_no_neutrino.M(),
     )
 
-    for index in range(0, anti_pred.shape[1], 4):
+    for index in range(0, anti_pred.shape[1], 3):
         lorentz = TLorentzVector()
-        phi = get_radians_from_sin_cos(
-            anti_pred[event][index + 2],
-            anti_pred[event][index + 3]
-        )
         lorentz.SetPtEtaPhiM(
             anti_pred[event][index],
             anti_pred[event][index + 1],
-            phi,
+            anti_pred[event][index + 2],
             0
         )
         antitau_lorentz += lorentz
