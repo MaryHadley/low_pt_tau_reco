@@ -4,7 +4,9 @@ For information on the model's performance and purpose, please see the following
 
 # Using model
 
-If you wish to use the model without modifying it, two trained models are available for use (tau_model.hdf5 and antitau_model.hdf5). To use them, use the following code:
+If you wish to use the model without modifying it, two trained models are available for use (tau_model.hdf5 and antitau_model.hdf5). They are available for download at ```/afs/cern.ch/user/w/wspeckma/public/low_pt_tau_reconstruction```. 
+
+The following code loads the models and predicts the neutrino and antineutrino properties:
 
 ```python
 import numpy as np
