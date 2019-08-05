@@ -4,7 +4,7 @@ For information on the model's performance and purpose, please see the following
 
 # Using model
 
-If you wish to use the model without modifying it, two trained models are available for use (tau_model.hdf5 and antitau_model.hdf5). They are available for download at ```/afs/cern.ch/user/w/wspeckma/public/low_pt_tau_reconstruction```. 
+If you wish to use the model without modifying it, two trained models are available for use (tau_model.hdf5 and antitau_model.hdf5). They are available for download at ```/afs/cern.ch/user/w/wspeckma/public/low_pt_tau_reconstruction/tau_model.hdf5``` and ```/afs/cern.ch/user/w/wspeckma/public/low_pt_tau_reconstruction/antitau_model.hdf5```. 
 
 The following code loads the models and predicts the neutrino and antineutrino properties:
 
@@ -81,5 +81,8 @@ This will ensure tau_pred and antitau_pred will be numpy arrays of the form:
 ]
 ```
 
+# Modifying the model
+
+If you'd like to train the model yourself, modify it or adapt it for different purposes, the model file and the histogram generation file are included. The data used for the training of the model is available at ```/afs/cern.ch/user/w/wspeckma/public/low_pt_tau_reconstruction/momentum_vector_data100k.root```. 
 
 
