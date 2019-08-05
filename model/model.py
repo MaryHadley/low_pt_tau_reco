@@ -1,11 +1,7 @@
 import tensorflow as tf
 import numpy as np
-import matplotlib.pyplot as plt
 import uproot
 from array import array
-import ROOT
-from ROOT import TLorentzVector
-from collections import OrderedDict
 
 tau_feature_names = [
     b'pi_minus1_pt',
