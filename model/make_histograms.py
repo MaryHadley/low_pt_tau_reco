@@ -42,7 +42,9 @@ antitau_label_names = [
 ]
 
 
-file = uproot.open('momentum_vector_data100k.root')['tree']
+#file = uproot.open('momentum_vector_data100k.root')['tree']
+#file = uproot.open('cartesian_upsilon_taus.root')['tree']
+file = uproot.open('cartesian_upsilon_taus_ALL.root')['tree']
 
 tau_features = []
 tau_labels = []
@@ -147,6 +149,9 @@ pred = tau_model.predict(
 anti_pred = antitau_model.predict(
     antitau_features_test
 )
+
+print "pred is:", pred
+print "anti_pred is:", anti_pred
 
 
 def arr_normalize(arr):

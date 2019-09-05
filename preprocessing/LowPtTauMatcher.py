@@ -6,9 +6,13 @@ from array import array
 from ROOT import TLorentzVector
 import math
 import argparse
+#from argparse import ArgumentParser
 import os
 import uproot
 import numpy as np
+
+#parser = ArgumentParser()
+#parser.add_argument('--suffix', default='_', help='Suffix to be added to the end of out the output file name, such as cartesian_upsilon_taus<_suffix>, where the _suffix would be some useful suffix')
 
 
 #################
@@ -66,6 +70,13 @@ def has_mcEvent_match(g_elec, reco_ele, delta_r_cut, charge_label):
 
 from FWCore.ParameterSet.VarParsing import VarParsing
 options = VarParsing ('python')
+options.register('suffix',
+                        '',
+                        VarParsing.multiplicity.singleton,
+                        VarParsing.varType.string,
+                        'suffix to append to out file name')
+
+
 options.parseArguments()
 print options
 
@@ -86,54 +97,53 @@ labelMET = ("slimmedMETs")
 #ROOT.gROOT.SetBatch()        # don't pop up canvases
 #ROOT.gROOT.SetStyle('Plain') # white background
 
-taum_branches = [
-'pi_minus1_px',
-'pi_minus1_py',
-'pi_minus1_pz',
-'pi_minus2_px',
-'pi_minus2_py',
-'pi_minus2_pz',
-'pi_minus3_px',
-'pi_minus3_py',
-'pi_minus3_pz',
-'taum_m',
-'taum_neu_px',
-'taum_neu_py',
-'taum_neu_pz',
-]
+# taum_branches = [
+# 'pi_minus1_px',
+# 'pi_minus1_py',
+# 'pi_minus1_pz',
+# 'pi_minus2_px',
+# 'pi_minus2_py',
+# 'pi_minus2_pz',
+# 'pi_minus3_px',
+# 'pi_minus3_py',
+# 'pi_minus3_pz',
+# 'taum_m',
+# 'taum_neu_px',
+# 'taum_neu_py',
+# 'taum_neu_pz',
+# ]
+# 
+# taup_branches = [
+# 'pi_plus1_px',
+# 'pi_plus1_py',
+# 'pi_plus1_pz',
+# 'pi_plus2_px',
+# 'pi_plus2_py',
+# 'pi_plus2_pz',
+# 'pi_plus3_px',
+# 'pi_plus3_py',
+# 'pi_plus3_pz',
+# 'taup_m',
+# 'taup_neu_px',
+# 'taup_neu_py',
+# 'taup_neu_pz',
+# ]
+# 
+# branches = taum_branches + taup_branches
+# branches.append('upsilon_m')
+# 
 
-taup_branches = [
-'pi_plus1_px',
-'pi_plus1_py',
-'pi_plus1_pz',
-'pi_plus2_px',
-'pi_plus2_py',
-'pi_plus2_pz',
-'pi_plus3_px',
-'pi_plus3_py',
-'pi_plus3_pz',
-'taup_m',
-'taup_neu_px',
-'taup_neu_py',
-'taup_neu_pz',
-]
-
-branches = taum_branches + taup_branches
-branches.append('upsilon_m')
-
-"""
-taum_branches =
-[
-'pi_minus1_normpt',
+taum_branches =[
+'pi_minus1_pt',
 'pi_minus1_eta',
 'pi_minus1_phi',
-'pi_minus1_normpt',
-'pi_minus1_eta',
-'pi_minus1_phi',
-'pi_minus2_normpt',
+#'pi_minus1_pt',
+#'pi_minus1_eta',
+#'pi_minus1_phi',
+'pi_minus2_pt',
 'pi_minus2_eta',
 'pi_minus2_phi',
-'pi_minus3_normpt',
+'pi_minus3_pt',
 'pi_minus3_eta',
 'pi_minus3_phi',
 'taum_neu_pt',
@@ -142,18 +152,17 @@ taum_branches =
 'taum_mass'
 ]
 
-taup_branches =
-[
- 'pi_plus1_normpt',
+taup_branches =[
+ 'pi_plus1_pt',
  'pi_plus1_eta',
  'pi_plus1_phi',
- 'pi_plus1_normpt',
- 'pi_plus1_eta',
- 'pi_plus1_phi',
- 'pi_plus2_normpt',
+# 'pi_plus1_pt',
+# 'pi_plus1_eta',
+# 'pi_plus1_phi',
+ 'pi_plus2_pt',
  'pi_plus2_eta',
  'pi_plus2_phi',
- 'pi_plus3_normpt',
+ 'pi_plus3_pt',
  'pi_plus3_eta',
  'pi_plus3_phi',
  'taup_neu_pt',
@@ -161,12 +170,20 @@ taup_branches =
  'taup_neu_phi',
  'taup_mass'
 ]
-"""
 
 
+branches = taum_branches + taup_branches
+branches.append('upsilon_m')
+branches.append('neutrino_pt')
+branches.append('neutrino_phi')
+branches.append('neutrino_eta')
+branches.append('antineutrino_pt')
+branches.append('antineutrino_phi')
+branches.append('antineutrino_eta')
 
-
-file_out = ROOT.TFile('cartesian_upsilon_taus.root', 'recreate')
+suffix = options.suffix
+print 'suffix is:', suffix
+file_out = ROOT.TFile('cartesian_upsilon_taus_%s.root'%(suffix), 'recreate')
 file_out.cd()
 
 taup_ntuple = ROOT.TNtuple('tree', 'tree', ':'.join(taum_branches))
@@ -176,7 +193,7 @@ taum_ntuple = ROOT.TNtuple('tree', 'tree', ':'.join(taup_branches))
 
 
 ntuple = ROOT.TNtuple('tree', 'tree', ':'.join(branches))
-
+#print 'ntuple is:', ntuple
 
 verb = False
 
@@ -615,8 +632,8 @@ for event in events:
         taum_tofill['pi_minus3_normpt'] = pi_m_lv3.Pt() / ptTot
         
         taum_ntuple.Fill(array('f', taum_tofill.values()))
+        
         """
-
 
     if tag_taup:
         print("Found tau+")
@@ -670,45 +687,46 @@ for event in events:
         print 'Found Upsilon -> tau+ tau- -> pi+*3 pi-*3'
         
         tofill = OrderedDict(zip(branches, [-99.] * len(branches)))
+        print "tofill is:", tofill
 
         upsilon_lv = neu_lv + antineu_lv + pi_m_lv1 + pi_m_lv2 + pi_m_lv3 + pi_p_lv1 + pi_p_lv2 + pi_p_lv3
-        
-        tofill['taup_neu_px'] = antineu_lv.Px()
-        tofill['taup_neu_py'] = antineu_lv.Py()
-        tofill['taup_neu_pz'] = antineu_lv.Pz()
-        
-        tofill['pi_plus1_px'] = pi_p_lv1.Px()
-        tofill['pi_plus1_py'] = pi_p_lv1.Py()
-        tofill['pi_plus1_pz'] = pi_p_lv1.Pz()
-        tofill['pi_plus2_px'] = pi_p_lv2.Px()
-        tofill['pi_plus2_py'] = pi_p_lv2.Py()
-        tofill['pi_plus2_pz'] = pi_p_lv2.Pz()
-        tofill['pi_plus3_px'] = pi_p_lv3.Px()
-        tofill['pi_plus3_py'] = pi_p_lv3.Py()
-        tofill['pi_plus3_pz'] = pi_p_lv3.Pz()
-        tofill['taup_m'] = taup_lv.M()
-        
-        tofill['pi_minus1_px'] = pi_m_lv1.Px()
-        tofill['pi_minus1_py'] = pi_m_lv1.Py()
-        tofill['pi_minus1_pz'] = pi_m_lv1.Pz()
-        tofill['pi_minus2_px'] = pi_m_lv2.Px()
-        tofill['pi_minus2_py'] = pi_m_lv2.Py()
-        tofill['pi_minus2_pz'] = pi_m_lv2.Pz()
-        tofill['pi_minus3_px'] = pi_m_lv3.Px()
-        tofill['pi_minus3_py'] = pi_m_lv3.Py()
-        tofill['pi_minus3_pz'] = pi_m_lv3.Pz()
-        
-        tofill['taum_neu_px'] = neu_lv.Px()
-        tofill['taum_neu_py'] = neu_lv.Py()
-        tofill['taum_neu_pz'] = neu_lv.Pz()
-        tofill['taum_m'] = taum_lv.M()
-        
-        tofill['upsilon_m'] = upsilon_lv.M()
-        
-        ntuple.Fill(array('f', tofill.values()))
+        # '''
+#         tofill['taup_neu_px'] = antineu_lv.Px()
+#         tofill['taup_neu_py'] = antineu_lv.Py()
+#         tofill['taup_neu_pz'] = antineu_lv.Pz()
+#         
+#         tofill['pi_plus1_px'] = pi_p_lv1.Px()
+#         tofill['pi_plus1_py'] = pi_p_lv1.Py()
+#         tofill['pi_plus1_pz'] = pi_p_lv1.Pz()
+#         tofill['pi_plus2_px'] = pi_p_lv2.Px()
+#         tofill['pi_plus2_py'] = pi_p_lv2.Py()
+#         tofill['pi_plus2_pz'] = pi_p_lv2.Pz()
+#         tofill['pi_plus3_px'] = pi_p_lv3.Px()
+#         tofill['pi_plus3_py'] = pi_p_lv3.Py()
+#         tofill['pi_plus3_pz'] = pi_p_lv3.Pz()
+#         tofill['taup_m'] = taup_lv.M()
+#         
+#         tofill['pi_minus1_px'] = pi_m_lv1.Px()
+#         tofill['pi_minus1_py'] = pi_m_lv1.Py()
+#         tofill['pi_minus1_pz'] = pi_m_lv1.Pz()
+#         tofill['pi_minus2_px'] = pi_m_lv2.Px()
+#         tofill['pi_minus2_py'] = pi_m_lv2.Py()
+#         tofill['pi_minus2_pz'] = pi_m_lv2.Pz()
+#         tofill['pi_minus3_px'] = pi_m_lv3.Px()
+#         tofill['pi_minus3_py'] = pi_m_lv3.Py()
+#         tofill['pi_minus3_pz'] = pi_m_lv3.Pz()
+#         
+#         tofill['taum_neu_px'] = neu_lv.Px()
+#         tofill['taum_neu_py'] = neu_lv.Py()
+#         tofill['taum_neu_pz'] = neu_lv.Pz()
+#         tofill['taum_m'] = taum_lv.M()
+#         
+#         tofill['upsilon_m'] = upsilon_lv.M()
+#         
+#        ntuple.Fill(array('f', tofill.values()))
 
-
-        """
+ 
+         
         tofill['neutrino_pt'] = gen_neu[0].pt()
         tofill['neutrino_eta'] = gen_neu[0].eta()
         tofill['neutrino_phi'] = gen_neu[0].phi()
@@ -746,7 +764,7 @@ for event in events:
         tofill['pi_plus3_m'] = pi_p_lv3.M()
      
         
-        #tofill['upsilon_m'] = upsilon_lv.M()
+        tofill['upsilon_m'] = upsilon_lv.M()
     
     
         upsilon_no_neu_lv = pi_m_lv1 + pi_m_lv2 + pi_m_lv3 + pi_p_lv1 + pi_p_lv2 + pi_p_lv3
@@ -768,10 +786,11 @@ for event in events:
         
         tofill['gen_taum_pt'] = gen_taum_lv.Pt()
         tofill['gen_taup_pt'] = gen_taup_lv.Pt()
-       
-       
+        
+        ntuple.Fill(array('f', tofill.values()))      
+        print 'ntuple is:', ntuple 
 
-    """
+    
 
 
 

@@ -37,7 +37,9 @@ antitau_label_names = [
     b'antineutrino_phi',
 ]
 
-file = uproot.open('momentum_vector_data100k.root')['tree']
+#file = uproot.open('cartesian_upsilon_taus.root')['tree']
+#file = uproot.open('momentum_vector_data100k.root')['tree']
+file = uproot.open('cartesian_upsilon_taus_ALL.root')['tree']
 
 tau_features = []
 tau_labels = []
@@ -120,7 +122,7 @@ antitau_labels_test = antitau_labels[int(0.9 * antitau_labels.shape[0]):, :]
 def create_model():
     model = tf.keras.Sequential()
     model.add(
-        tf.keras.layers.Dense(640, activation=tf.keras.activations.relu)
+        tf.keras.layers.Dense(640, activation=tf.keras.activations.relu, input_shape=(12,)) 
     )
     model.add(
         tf.keras.layers.Dropout(0.3)
@@ -230,4 +232,5 @@ anti_pred = antitau_model.predict(
 
 tau_model.save('tau_model.hdf5')
 antitau_model.save('antitau_model.hdf5')
-
+print 'tau_model summary is:', tau_model.summary()
+print 'antitau_model summary is:', antitau_model.summary()
