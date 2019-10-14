@@ -1,3 +1,4 @@
+#Note: this model has the pT variable normalized by total pT. It does NOT work as well as the model where pT is unnormalized.
 import tensorflow as tf
 import numpy as np
 import uproot
