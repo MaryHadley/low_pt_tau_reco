@@ -772,9 +772,11 @@ for event in events:
         
         taum_no_neu_lv = pi_m_lv1 + pi_m_lv2 + pi_m_lv3
         tofill['taum_m_no_neu'] = taum_no_neu_lv.M()
+        tofill['taum_mass'] = taum_lv.M()
         
         taup_no_neu_lv = pi_p_lv1 + pi_p_lv2 + pi_p_lv3
         tofill['taup_m_no_neu'] = taup_no_neu_lv.M()
+        tofill['taup_mass'] = taup_lv.M()
         
         coll_x_plus = taup_no_neu_lv.Pt() / (taup_no_neu_lv.Pt() + met.pt())
         coll_x_minus = taum_no_neu_lv.Pt() / (taum_no_neu_lv.Pt() + met.pt())
