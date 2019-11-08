@@ -387,7 +387,7 @@ for event in events:
 
                 if found_anti_neu and positive_found and negative_found == 2:
                     tag_taum = True 
-                    if tag_taum: print "tag_taum is True!"
+#                    if tag_taum: print "tag_taum is True!"
                     break
 
         #  anti tau (positive, should have 1- pion and 2+ pions)
@@ -445,10 +445,12 @@ for event in events:
             leps_mydecay.append(gen_neu)
             leps_mydecay.append(gen_antineu)
             tag_upsilon = True
-            if tag_upsilon: print "tag_upsilon is True!"
+            if tag_upsilon: print "tag_upsilon is True before neutral pion check!"
             taup_has_pionn = len(g_taup_pionn) != 0
             taum_has_pionn = len(g_taum_pionn) != 0
-            
+            if (taup_has_pionn) or  (taum_has_pionn): 
+                tag_upsilon = False
+                print 'tag_upsilon changed to false because neutral pions were found' 
 
             # tau pions
             # for genpi in g_taum_pions:
@@ -546,9 +548,9 @@ for event in events:
 #                 continue
 #             
 #             They put an event level cut in and killed everything but saved themselves with what i thought was redundant below oh good god
-            if antineu_etaCheck or neu_etaCheck:
-                tag_upsilon = False
-                print "failed the (anti)neu eta check!"
+#            if antineu_etaCheck or neu_etaCheck:
+#                tag_upsilon = False
+#                print "failed the (anti)neu eta check!"
 #             
 #             if len(matched_pionp) == 3 and len(matched_photonp) % 2 == 0:
 #                 tag_taup = True
@@ -703,6 +705,7 @@ for event in events:
     if tag_upsilon:
         print 'Found Upsilon -> tau+ tau- -> pi+*3 pi-*3'
         tagUpsilonCount +=1
+        print 'tagUpsilonCount is:', tagUpsilonCount
         tofill = OrderedDict(zip(branches, [-99.] * len(branches)))
 #        print "tofill is:", tofill
 
@@ -810,7 +813,7 @@ for event in events:
         #print 'ntuple is:', ntuple 
 
     
-    if tagUpsilonCount > 3559: break #making sample of same size as Willem and Shray used to do a direct comparison
+#    if tagUpsilonCount > 20: break #making sample of same size as Willem and Shray used to do a direct comparison
 
 
 
