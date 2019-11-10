@@ -218,6 +218,8 @@ photon_id = 22
 events = Events (options)
 nTot = 0
 tagUpsilonCount = 0
+finalBreakCount=0
+ZOINKSCount = 0
 
 for event in events:
     print 'Processing event: %i...'%(nTot)
@@ -347,6 +349,11 @@ for event in events:
 
     # comb upsilon particles, see if decayed into t-t+
     for p in gen_upsilon:
+#        print 'len(gen_upsilon) is:', len(gen_upsilon)
+#        if (len(gen_upsilon)) != 1: 
+#            print 'len(gen_upsilon) does NOT equal 1, len(gen_upsilon) is:', len(gen_upsilon)
+#            print 'ZOINKS'
+#            ZOINKSCount +=1
         found_taup = False
         found_taum = False
         #  normal tau (negative, should have 2- pions and 1+ pion)
@@ -392,6 +399,8 @@ for event in events:
 
         #  anti tau (positive, should have 1- pion and 2+ pions)
         for pa in gen_taum:
+#            print 'len (gen_taum) is:', len(gen_taum)
+#            print "I entered here 1"
             mother = pa.mother(0)
             if mother and isAncestor(p, mother):
                 g_taum = pa
@@ -448,10 +457,19 @@ for event in events:
             if tag_upsilon: print "tag_upsilon is True before neutral pion check!"
             taup_has_pionn = len(g_taup_pionn) != 0
             taum_has_pionn = len(g_taum_pionn) != 0
-            if (taup_has_pionn) or  (taum_has_pionn): 
-                tag_upsilon = False
-                print 'tag_upsilon changed to false because neutral pions were found' 
+            if  not ((taup_has_pionn) or  (taum_has_pionn)): 
+               
+                print 'upsilon is good after checking for neutral pions, none found in the decay chain (though of course lots of them will be hanging around the event)!'
+                break #the upsilon is good, we can leave this loop
+             #sadness, the upsilon is bad
+            tag_upsilon = False
+            # no need for an explicit continue any more since we're now at the natural end of the loop anyway
 
+
+	
+	
+	
+   
             # tau pions
             # for genpi in g_taum_pions:
 #                 min_ind = None
@@ -541,13 +559,15 @@ for event in events:
 #                         matched_photonp.append(rec_photons[min_ind])
 
 #we are are not dealing with neutral pions right now, also we have no reco to match it to anyway because we are not running the full-on code
-
+# 
 #             if len(gen_pionn) != 0:
 #                 tag_upsilon = False
 #                 print "failed the gen_pionn length check"
+#                 print 'len(gen_pionn) is:', len(gen_pionn)
+#                 print "I entered here 2" #I think this looks like it's sending you back to the pa in gen_taum and pa in gen_taup level but need to check RUBBER DUCK
 #                 continue
 #             
-#             They put an event level cut in and killed everything but saved themselves with what i thought was redundant below oh good god
+#             gen_pionn is an event level variable (are there any neutral pions in this event at all? not in the decay chain specifically but hanging around?) so this cut kills everything, I think that is why there is the tag_upsilon switch that I thought was redundant below 
 #            if antineu_etaCheck or neu_etaCheck:
 #                tag_upsilon = False
 #                print "failed the (anti)neu eta check!"
@@ -559,8 +579,9 @@ for event in events:
 #             
 #             if len(matched_pionp) + len(matched_pionm) != 6:
 #                 tag_upsilon = False
-
-        break
+#        print "i reached the final break" # RUBBER DUCK I'm breaking out of the for p in gen_upsilon loop (see L349 (or maybe3 349ish if this code gets updated and I forget to change this comment) for that loop)
+#        finalBreakCount += 1
+#        break
 
     nTot += 1
     print "I made it through %s events" %(nTot)
@@ -813,10 +834,11 @@ for event in events:
         #print 'ntuple is:', ntuple 
 
     
-#    if tagUpsilonCount > 20: break #making sample of same size as Willem and Shray used to do a direct comparison
+#    if tagUpsilonCount > 5: break #making sample of same size as Willem and Shray used to do a direct comparison
+#    if nTot > 2: break
 
-
-
+#print 'finalBreakCount is:', finalBreakCount
+#print 'ZOINKSCount is:', ZOINKSCount
 
 
 file_out.cd()
