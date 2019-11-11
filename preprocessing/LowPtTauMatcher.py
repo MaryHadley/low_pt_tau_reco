@@ -11,6 +11,7 @@ import os
 import uproot
 import numpy as np
 
+#Had P.L. look over as second pair of eyes, comments below passed his muster. MHH 11 Nov. 2019
 #parser = ArgumentParser()
 #parser.add_argument('--suffix', default='_', help='Suffix to be added to the end of out the output file name, such as cartesian_upsilon_taus<_suffix>, where the _suffix would be some useful suffix')
 
@@ -340,13 +341,13 @@ for event in events:
     tag_taup = False
     tag_taum = False
 
-    # comb upsilon particles, see if decayed into t-t+
-    for p in gen_upsilon:
+    # comb upsilon particles, see if decayed into t-t+. gen_upsilon loop starts next line, one inside overall event loop
+    for p in gen_upsilon: #Gen Upsilon loop starts here, this is inside the overall event loop
         found_taup = False
         found_taum = False
         #  normal tau (negative, should have 2- pions and 1+ pion)
-        # comb list of antitau generated
-        for pa in gen_taup:
+        # comb list of antitau generated, gen_taup loop starts here, this is one inside gen_upsilon loop
+        for pa in gen_taup: # gen_taup loop starts here, this is one inside the gen_upsilon loop
             mother = pa.mother(0)
             if mother and isAncestor(p, mother):
                 g_taup = pa
@@ -381,9 +382,9 @@ for event in events:
                         g_taum_pions.append(pp)
 
                 if found_anti_neu and positive_found and negative_found == 2:
-                    break
+                    break #if we have found a good tau, leave the loop, otherwise keep iterating through and check the next tau in the gen_taup list
 
-        #  anti tau (positive, should have 1- pion and 2+ pions)
+        #  anti tau (positive, should have 1- pion and 2+ pions) gen_taum loop starts here, this is also one inside gen_upsilon loop
         for pa in gen_taum:
             mother = pa.mother(0)
             if mother and isAncestor(p, mother):
@@ -420,8 +421,9 @@ for event in events:
                         g_taup_pions.append(pp)
 
                 if found_neu and positive_found == 2 and negative_found:
-                    break
-
+                    break  # same deal, if we have found a good tau, great, leave the loop. otherwise, move on and check the next tau in the gen_taum list
+                    
+        #this if statement is one in from the gen_upsilon loop, just like the gen_taup and gen_taum loops are. this loop only entered if the conditions below are satisfied, otherwise skipped and the code goes to check the next gen_upsilon
         if found_taum and found_taup and len(g_taum_pions) == 3 and len(g_taup_pions) == 3 and found_neu and found_anti_neu:
             #print "This event has ", len(g_taup_photons) / 2, " taup pionn"
             #print "This event has ", len(g_taum_photons) / 2, " taum pionn"
@@ -433,11 +435,13 @@ for event in events:
             leps_mydecay += g_taup_pionn
             leps_mydecay.append(gen_neu)
             leps_mydecay.append(gen_antineu)
-            tag_upsilon = True
+            tag_upsilon = True #at this point, we have declared tag_upsilon true, aka I have a good upsilon...but hang on, further checks coming
             taup_has_pionn = len(g_taup_pionn) != 0
             taum_has_pionn = len(g_taum_pionn) != 0
 
             # tau pions
+            # If we think we have a good upsilon, check all the genpi in the g_taum_pions associated with the good upsilon and find the best match with a rec pion in the event
+            ##this loop is one in from the loop above, the loop we enter if we think we have a good upsilon, and is two in from the general overall upsilon loop
             for genpi in g_taum_pions:
                 min_ind = None
                 min_deltaR = 9999
@@ -458,9 +462,12 @@ for event in events:
                         min_deltaR = deltaR
                 if matched_x:
                     matched_pionm.append(rec_pions[min_ind])
-        
+             
+             
+             # if the taum_has associated gen neutral pions in its decay chain!! Not just hanging around in the event. match this gen neutral pion with its best reco pion...except oh wait, we do not have reco pions, we have reco photons, so we need to dig a little deeper
+            
             if taum_has_pionn:
-                for genph in g_taum_photons:
+                for genph in g_taum_photons: #ok we know the taum has neutral ph in its decay chain, because we entered this loop.
                 
                     min_ind = None
                     min_deltaR = 9999
@@ -479,10 +486,12 @@ for event in events:
                             matched_x = True
                             min_deltaR = deltaR
                     if matched_x:
-                        matched_photonm.append(rec_photons[min_ind])
+                        matched_photonm.append(rec_photons[min_ind]) #ok, so we decide if we have matched pion by doing the gen ph to rec ph matching. This loop is at the same level as the genpi in g_taum_pions loop, so this is one in from the good upsilon loop
                     
                     
         #antitau pions
+        # # If we think we have a good upsilon, check all the genpi in the g_taum_pions associated with the good upsilon and find the best match with a rec pion in the event
+            ##this loop is one in from the loop we enter if we think we have a good upsilon, and is two in from the general overall upsilon loop
             for genpi in g_taup_pions:
 
                 min_ind = None
@@ -522,31 +531,32 @@ for event in events:
                             matched_x = True
                             min_deltaR = deltaR
                     if matched_x:
-                        matched_photonp.append(rec_photons[min_ind])
+                        matched_photonp.append(rec_photons[min_ind])#ok, so we decide if we have matched pion by doing the gen ph to rec ph matching. This loop is at the same level as the genpi in g_taup_pions loop, so this is one in from the good upsilon loop
 
 
 
             if len(gen_pionn) != 0:
                 tag_upsilon = False
-                continue
+                print 'len(gen_pionn) is:', len(gen_pionn)
+                continue#QUESTION RUBBER DUCK: ok, I don't understand why this does not kill all the events, because they made a mistake here, they checked whether there are any neutral pions hanging around, not just in the decay chain, and of course there always are. This is again one in from good upsilon loop
             
             
             if antineu_etaCheck or neu_etaCheck:
-                tag_upsilon = False
+                tag_upsilon = False # this check is useless and I will likely remove it. one in from gen upsilon loop this causes tag upsilon to flip if check fails
             
             
-            if len(matched_pionp) == 3 and len(matched_photonp) % 2 == 0:
-                tag_taup = True
+            if len(matched_pionp) == 3 and len(matched_photonp) % 2 == 0: #RUBBER DUCK
+                tag_taup = True #ok this is one in from the gen upsilon loop. Also it is not clear to me how this cuts out 3 prong plus neutral pion decays...they are just checking that there are an even number of matched photons, which could be true for decays with neutral pions in the decay chain...Update I do NOT think this is doing what it is supposed to, aka I think it is NOT cutting out decays with neutral pions in the decay chain
             if len(matched_pionm) == 3 and len(matched_photonm) % 2 == 0:
-                tag_taum = True
+                tag_taum = True #same comment....also note that in these they are setting the individual tag_taum, tag_taup tags, not the overall tag_upsilon
             
-            if len(matched_pionp) + len(matched_pionm) != 6:
+            if len(matched_pionp) + len(matched_pionm) != 6: #one in from gen upsilon loop, this causes the tag_upsilon to flip if the check fails
                 tag_upsilon = False
 
-        break
+        break # this break takes you out of the overall upsilon loop
 
     nTot += 1
-
+#    if nTot > 50: break
     gen_taup_lv = TLorentzVector()
     gen_taup_lv.SetPtEtaPhiM(gen_taum[0].pt(), gen_taum[0].eta(), gen_taum[0].phi(), 0.139)
 
@@ -575,9 +585,9 @@ for event in events:
     taup_pionn_lv = TLorentzVector()
 
     if tag_taum and tag_taup:
-        tag_upsilon = True
+        tag_upsilon = True #one in from overall event loop #ok I think this is how the gen_pionn does not kill off everything...something that failed gen pion neutral could then pass the individual tag_taum, tag_taup tags around L547ish, and then get flipped to
     
-    if tag_taum:
+    if tag_taum: #one in from overall event loop
         print("found Tau-")
         #taum_tofill = OrderedDict(zip(taum_branches, [-99.] * len(taum_branches)))
         
@@ -635,7 +645,7 @@ for event in events:
         
         """
 
-    if tag_taup:
+    if tag_taup: #one in from overall event loop 
         print("Found tau+")
         #taup_tofill = OrderedDict(zip(taup_branches, [-99.] * len(taup_branches)))
         pi_p_lv1.SetPtEtaPhiM(matched_pionp[0].pt(), matched_pionp[0].eta(), matched_pionp[0].phi(), 0.139)
@@ -683,9 +693,9 @@ for event in events:
         """
     
 
-    if tag_upsilon:
+    if tag_upsilon: # one in from overall event loop
         print 'Found Upsilon -> tau+ tau- -> pi+*3 pi-*3'
-        
+        #fill stuff, note we fill with reco info
         tofill = OrderedDict(zip(branches, [-99.] * len(branches)))
         print "tofill is:", tofill
 
