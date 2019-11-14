@@ -584,8 +584,8 @@ for event in events:
 #        break
 
     nTot += 1
-    print "nTot is:", nTot
-    print "I made it through %s events" %(nTot)
+#    print "nTot is:", nTot
+#    print "I made it through %s events" %(nTot)
     #if nTot > 1: break
     gen_taup_lv = TLorentzVector()
     gen_taup_lv.SetPtEtaPhiM(gen_taum[0].pt(), gen_taum[0].eta(), gen_taum[0].phi(), 0.139)
@@ -727,18 +727,18 @@ for event in events:
     if tag_upsilon: #pT in GeV
         if g_taum_pions[0].eta() > 2.5 or g_taum_pions[0].eta() < -2.5  or g_taum_pions[1].eta() > 2.5 or g_taum_pions[1].eta() < -2.5  or g_taum_pions[2].eta() > 2.5 or g_taum_pions[2].eta() < -2.5  or g_taup_pions[0].eta() > 2.5 or  g_taup_pions[0].eta() < -2.5 or g_taup_pions[1].eta() > 2.5 or g_taup_pions[1].eta() < -2.5 or g_taup_pions[2].eta() > 2.5 or g_taup_pions[2].eta() < -2.5 or g_taum_pions[0].pt() < 0.7 or g_taum_pions[1].pt() < 0.7 or g_taum_pions[2].pt() < 0.7 or  g_taup_pions[0].pt() < 0.7 or  g_taup_pions[1].pt() < 0.7 or g_taup_pions[2].pt() < 0.7:
             print "one of the candidate pions failed the eta cut or failed the pT cut!"
-            print "g_taum_pions[0].eta() is:", g_taum_pions[0].eta()
-            print "g_taum_pions[1].eta() is:", g_taum_pions[1].eta()
-            print "g_taum_pions[2].eta() is:", g_taum_pions[2].eta()
-            print "g_taup_pions[0].eta() is:", g_taup_pions[0].eta()
-            print "g_taup_pions[1].eta() is:", g_taup_pions[1].eta()
-            print "g_taup_pions[2].eta() is:", g_taup_pions[2].eta()
-            print "g_taum_pions[0].pt() is:",  g_taum_pions[0].pt()
-            print "g_taum_pions[1].pt() is:",  g_taum_pions[1].pt()
-            print "g_taum_pions[2].pt() is:",  g_taum_pions[2].pt()
-            print "g_taup_pions[0].pt() is:",  g_taup_pions[0].pt()
-            print "g_taup_pions[1].pt() is:",  g_taup_pions[1].pt()
-            print "g_taup_pions[2].pt() is:",  g_taup_pions[2].pt()
+#            print "g_taum_pions[0].eta() is:", g_taum_pions[0].eta()
+#            print "g_taum_pions[1].eta() is:", g_taum_pions[1].eta()
+#            print "g_taum_pions[2].eta() is:", g_taum_pions[2].eta()
+#            print "g_taup_pions[0].eta() is:", g_taup_pions[0].eta()
+#            print "g_taup_pions[1].eta() is:", g_taup_pions[1].eta()
+#            print "g_taup_pions[2].eta() is:", g_taup_pions[2].eta()
+#            print "g_taum_pions[0].pt() is:",  g_taum_pions[0].pt()
+#            print "g_taum_pions[1].pt() is:",  g_taum_pions[1].pt()
+#            print "g_taum_pions[2].pt() is:",  g_taum_pions[2].pt()
+#            print "g_taup_pions[0].pt() is:",  g_taup_pions[0].pt()
+#            print "g_taup_pions[1].pt() is:",  g_taup_pions[1].pt()
+#            print "g_taup_pions[2].pt() is:",  g_taup_pions[2].pt()
             continue
         print 'Found Upsilon -> tau+ tau- -> pi+*3 pi-*3'
         tagUpsilonCount +=1
@@ -850,7 +850,7 @@ for event in events:
         #print 'ntuple is:', ntuple 
 
     
-    if tagUpsilonCount > 50: break #making sample of same size as Willem and Shray used to do a direct comparison
+#    if tagUpsilonCount > 50: break #making sample of same size as Willem and Shray used to do a direct comparison
 #    if nTot > 10:
 #        print "nTot is:", nTot
 #        break
@@ -866,3 +866,4 @@ file_out.cd()
 #pEff_lostTrack.Write()
 ntuple.Write()
 file_out.Close()
+
