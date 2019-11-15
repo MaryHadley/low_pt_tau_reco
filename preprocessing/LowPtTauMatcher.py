@@ -181,6 +181,7 @@ branches.append('neutrino_eta')
 branches.append('antineutrino_pt')
 branches.append('antineutrino_phi')
 branches.append('antineutrino_eta')
+branches.append("EvtNoOfPassingEvt")
 
 suffix = options.suffix
 print 'suffix is:', suffix
@@ -537,7 +538,7 @@ for event in events:
 
             if len(gen_pionn) != 0:
                 tag_upsilon = False
-                print 'len(gen_pionn) is:', len(gen_pionn)
+#                print 'len(gen_pionn) is:', len(gen_pionn)
                 continue#QUESTION RUBBER DUCK: ok, I don't understand why this does not kill all the events, because they made a mistake here, they checked whether there are any neutral pions hanging around, not just in the decay chain, and of course there always are. This is again one in from good upsilon loop
             
             
@@ -694,7 +695,17 @@ for event in events:
     
 
     if tag_upsilon: # one in from overall event loop
+        if matched_pionm[0].pt() < 0.7 or matched_pionm[1].pt() < 0.7 or matched_pionm[2].pt() < 0.7 or matched_pionp[0].pt() < 0.7 or matched_pionp[1].pt() < 0.7 or matched_pionp[2].pt() < 0.7:
+            print "one of the candidate pions failed the pT cut!"
+            print "matched_pionm[0].pt() is:", matched_pionm[0].pt()
+            print "matched_pionm[1].pt() is:", matched_pionm[1].pt()
+            print "matched_pionm[2].pt() is:", matched_pionm[2].pt()
+            print "matched_pionp[0].pt() is:", matched_pionp[0].pt()
+            print "matched_pionp[1].pt() is:", matched_pionp[1].pt()
+            print "matched_pionp[2].pt() is:", matched_pionp[2].pt()
+            continue 
         print 'Found Upsilon -> tau+ tau- -> pi+*3 pi-*3'
+        print "Event number of the event that passed is:", (nTot -1)
         #fill stuff, note we fill with reco info
         tofill = OrderedDict(zip(branches, [-99.] * len(branches)))
         print "tofill is:", tofill
@@ -798,9 +809,9 @@ for event in events:
         
         tofill['gen_taum_pt'] = gen_taum_lv.Pt()
         tofill['gen_taup_pt'] = gen_taup_lv.Pt()
-        
+        tofill['EvtNoOfPassingEvt'] = (nTot-1)
         ntuple.Fill(array('f', tofill.values()))      
-        print 'ntuple is:', ntuple 
+#        print 'ntuple is:', ntuple 
 
     
 
