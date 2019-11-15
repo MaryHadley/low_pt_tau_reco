@@ -181,6 +181,7 @@ branches.append('neutrino_eta')
 branches.append('antineutrino_pt')
 branches.append('antineutrino_phi')
 branches.append('antineutrino_eta')
+branches.append("EvtNoOfPassingEvt")
 
 suffix = options.suffix
 print 'suffix is:', suffix
@@ -742,6 +743,7 @@ for event in events:
         print 'Found Upsilon -> tau+ tau- -> pi+*3 pi-*3'
         tagUpsilonCount +=1
         print 'tagUpsilonCount is:', tagUpsilonCount
+        print "Event number of the event that passed is:", (nTot-1)
         tofill = OrderedDict(zip(branches, [-99.] * len(branches)))
 #        print "tofill is:", tofill
 
@@ -844,6 +846,8 @@ for event in events:
         
         tofill['gen_taum_pt'] = gen_taum_lv.Pt()
         tofill['gen_taup_pt'] = gen_taup_lv.Pt()
+        
+        tofill['EvtNoOfPassingEvt'] = (nTot-1)
         
         ntuple.Fill(array('f', tofill.values()))      
         #print 'ntuple is:', ntuple 
