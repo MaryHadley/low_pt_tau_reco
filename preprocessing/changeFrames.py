@@ -18,12 +18,12 @@ sys.stdout.flush()
 
 def rotateToVisTauMomPointsInEtaEqualsZero(tau_orig_theta, tau_orig_phi, orig_four_vec_to_rotate):
     rotMatrix = np.array([[np.sin(tau_orig_phi), -np.cos(tau_orig_phi), 0], [((np.sin(tau_orig_theta))*(np.cos(tau_orig_phi))), ((np.sin(tau_orig_theta))*(np.sin(tau_orig_phi))), np.cos(tau_orig_theta)], [-((np.cos(tau_orig_theta))*(np.cos(tau_orig_phi))), -((np.cos(tau_orig_theta))*(np.sin(tau_orig_phi))), np.sin(tau_orig_theta)]])
-    
+#    print "rotMatrix before is:", rotMatrix
  # protection to make sure things that really are zero get set to 0 and not 10^-17 or something #this seems to not do what I think it should, ask Riju
     for element in np.nditer(rotMatrix, op_flags=['readwrite']):
-         if np.absolute(element) < 10.**(-10):
+         if abs(element) < 10.**(-10):
              element[...] = 0
-#    print "rotMatrix is:", rotMatrix        
+#    print "rotMatrix after is:", rotMatrix        
     tmp_Px = orig_four_vec_to_rotate.Px()
     tmp_Py = orig_four_vec_to_rotate.Py()
     tmp_Pz = orig_four_vec_to_rotate.Pz()
