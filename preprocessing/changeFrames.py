@@ -19,11 +19,11 @@ sys.stdout.flush()
 def rotateToVisTauMomPointsInEtaEqualsZero(tau_orig_theta, tau_orig_phi, orig_four_vec_to_rotate):
     rotMatrix = np.array([[np.sin(tau_orig_phi), -np.cos(tau_orig_phi), 0], [((np.sin(tau_orig_theta))*(np.cos(tau_orig_phi))), ((np.sin(tau_orig_theta))*(np.sin(tau_orig_phi))), np.cos(tau_orig_theta)], [-((np.cos(tau_orig_theta))*(np.cos(tau_orig_phi))), -((np.cos(tau_orig_theta))*(np.sin(tau_orig_phi))), np.sin(tau_orig_theta)]])
     
-    # protection to make sure things that really are zero get set to 0 and not 10^-17 or something
+ # protection to make sure things that really are zero get set to 0 and not 10^-17 or something #this seems to not do what I think it should, ask Riju
     for element in np.nditer(rotMatrix, op_flags=['readwrite']):
-        if element < 1.**(-10):
-            element[...] = 0
-            
+         if np.absolute(element) < 10.**(-10):
+             element[...] = 0
+#    print "rotMatrix is:", rotMatrix        
     tmp_Px = orig_four_vec_to_rotate.Px()
     tmp_Py = orig_four_vec_to_rotate.Py()
     tmp_Pz = orig_four_vec_to_rotate.Pz()
@@ -45,7 +45,7 @@ def rotateToVisTauMomPointsInEtaEqualsZero(tau_orig_theta, tau_orig_phi, orig_fo
 ##### test #####
 
 # v = TLorentzVector()
-# v.SetPxPyPzE(0,1,0,1)
+# v.SetPxPyPzE(-3.6740152498,-2.79192430698,  21.6557548444, 22.1777103583)
 # print "Px,Py,Pz,E,M:", v.Px(), v.Py(), v.Pz(), v.E(), v.M()
 # print "tau_orig_theta, tau_orig_phi:", v.Theta(), v.Phi()
 # tau_orig_theta_test = v.Theta()
