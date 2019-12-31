@@ -14,12 +14,19 @@ import sys
 sys.stdout.flush()
 
 
-#Functions to rotate 3 vectors from global to local coordinates and to unrotate them from the local frame bacak to the global frame
+#Functions to rotate 4 vectors from global to local coordinates and to unrotate them from the local frame bacak to the global frame. Takes a four vector, returns a four vector.
 
-def rotateToVisTauMomPointsInEtaEqualsZero(tau_orig_theta, tau_orig_phi, orig_four_vec_to_rotate):
-    rotMatrix = np.array([[np.sin(tau_orig_phi), -np.cos(tau_orig_phi), 0], [((np.sin(tau_orig_theta))*(np.cos(tau_orig_phi))), ((np.sin(tau_orig_theta))*(np.sin(tau_orig_phi))), np.cos(tau_orig_theta)], [-((np.cos(tau_orig_theta))*(np.cos(tau_orig_phi))), -((np.cos(tau_orig_theta))*(np.sin(tau_orig_phi))), np.sin(tau_orig_theta)]])
+def rotateToVisTauMomPointsInEtaEqualsZero(tau_orig_theta, tau_orig_phi, orig_four_vec_to_rotate): #tau_orig here is the visible tau 
+    rotMatrix = np.array([
+    
+     [np.sin(tau_orig_phi), -np.cos(tau_orig_phi), 0],
+     [((np.sin(tau_orig_theta))*(np.cos(tau_orig_phi))), ((np.sin(tau_orig_theta))*(np.sin(tau_orig_phi))), np.cos(tau_orig_theta)], 
+     [-((np.cos(tau_orig_theta))*(np.cos(tau_orig_phi))), -((np.cos(tau_orig_theta))*(np.sin(tau_orig_phi))), np.sin(tau_orig_theta)]
+     
+     ])
 #    print "rotMatrix before is:", rotMatrix
- # protection to make sure things that really are zero get set to 0 and not 10^-17 or something #this seems to not do what I think it should, ask Riju
+
+ # protection to make sure things that really are zero get set to 0 and not 10^-17 or something 
     for element in np.nditer(rotMatrix, op_flags=['readwrite']):
          if abs(element) < 10.**(-10):
              element[...] = 0
@@ -41,25 +48,44 @@ def rotateToVisTauMomPointsInEtaEqualsZero(tau_orig_theta, tau_orig_phi, orig_fo
     local_4vec.SetPxPyPzE(tmp_rotated_Px, tmp_rotated_Py, tmp_rotated_Pz, tmp_E)
     
     return local_4vec
+    
+    
+def unrotateFromVisTauMomPointsInEtaEqualsZero(tau_orig_theta, tau_orig_phi, rot_four_vec_to_unrotate):  #recall that the inverse of a rotation matrix is its transpose, so unrotMatrix is just the transpose of rotMatrix
+    unrotMatrix = np.array([
+    
+     [np.sin(tau_orig_phi),  ((np.sin(tau_orig_theta))*(np.cos(tau_orig_phi))),  -((np.cos(tau_orig_theta))*(np.cos(tau_orig_phi)))],
+     [-np.cos(tau_orig_phi), ((np.sin(tau_orig_theta))*(np.sin(tau_orig_phi))),  -((np.cos(tau_orig_theta))*(np.sin(tau_orig_phi)))], 
+     [0,                         np.cos(tau_orig_theta),                                  np.sin(tau_orig_theta)]                                                                                                                        
+    
+    ])
+
+
+
+
 
 ##### test #####
 
-# v = TLorentzVector()
-# v.SetPxPyPzE(-3.6740152498,-2.79192430698,  21.6557548444, 22.1777103583)
-# print "Px,Py,Pz,E,M:", v.Px(), v.Py(), v.Pz(), v.E(), v.M()
-# print "tau_orig_theta, tau_orig_phi:", v.Theta(), v.Phi()
-# tau_orig_theta_test = v.Theta()
-# tau_orig_phi_test = v.Phi()
+v = TLorentzVector()
+v.SetPxPyPzE(-3.6740152498,-2.79192430698,  21.6557548444, 22.1777103583)
+print "Px,Py,Pz,E,M:", v.Px(), v.Py(), v.Pz(), v.E(), v.M()
+print "tau_orig_theta, tau_orig_phi:", v.Theta(), v.Phi()
+tau_orig_theta_test = v.Theta()
+tau_orig_phi_test = v.Phi()
+
+
+
+ 
+toPrint = rotateToVisTauMomPointsInEtaEqualsZero(tau_orig_theta_test, tau_orig_phi_test, v)
 # 
-#  
-# toPrint = rotateToVisTauMomPointsInEtaEqualsZero(tau_orig_theta_test, tau_orig_phi_test, v)
-# # 
-# print toPrint
-# 
-# newPx = toPrint.Px()
-# newPy = toPrint.Py()
-# newPz = toPrint.Pz()
-# newE = toPrint.E()
-# newM = toPrint.M()
-# 
-# print "new Px, Py, Pz, E, M:", newPx, newPy, newPz, newE, newM
+print toPrint
+
+newPx = toPrint.Px()
+newPy = toPrint.Py()
+newPz = toPrint.Pz()
+newE = toPrint.E()
+newM = toPrint.M()
+newTheta = toPrint.Theta()
+newPhi = toPrint.Phi()
+newEta = toPrint.Eta()
+
+print "new Px, Py, Pz, E, M, Theta, Phi, Eta:", newPx, newPy, newPz, newE, newM, newTheta, newPhi, newEta
