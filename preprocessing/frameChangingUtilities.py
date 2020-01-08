@@ -20,7 +20,7 @@ sys.stdout.flush()
 
 # Function to rotate the visible tau momentum (defined as the vector sum of the momenta vectors associated with the three charged pions in the decay) to point along the Z axis (aka theta = 0). 
 #Takes the original theta and phi values associated with the visible tau momentum and the original visible tau momentum four vector, returns the four vector rotated so the visible tau momentum points along the Z axis.
-#My naming could be clearer, as this function can also take the pion and neutrino original theta and phi and the pion and neutrino original four vectors. If it is given this info, it rotates these four vectors to live in the frame in which the visible tau momentum points along the Z axis.
+#My naming could be clearer, as this function can also take the visible tau original theta and phi and the pion and neutrino original four vectors. If it is given this info, it rotates these four vectors to live in the frame in which the visible tau momentum points along the Z axis.
 
 def rotateToVisTauMomPointsAlongZAxis(tau_orig_theta, tau_orig_phi, orig_four_vec_to_rotate): #tau_orig here is the visible tau 
     rotMatrix = np.array([
@@ -57,7 +57,7 @@ def rotateToVisTauMomPointsAlongZAxis(tau_orig_theta, tau_orig_phi, orig_four_ve
      
 #Function to unrotate the visible tau momentum (defined as the vector sum of the momenta vectors associated with the three charged pions in the decay) from pointing along the Z axis (aka theta = 0) and bring it back to the original lab frame
 #Takes the original theta and phi values associated with the visible tau momentum four vector and the rotated visible tau momentum four vector, returns the original tau momentum four vector in the lab frame.
-#My naming could be clearer, as this function can also take the pion and neutrino original theta and phi and the pion and neutrino rotated four vectors. If it is given this info, it unrotates these four vectors and brings them back to living in the original lab frame.
+#My naming could be clearer, as this function can also take the visible tau original theta and phi and the pion and neutrino rotated four vectors. If it is given this info, it unrotates these four vectors and brings them back to living in the original lab frame.
 
 def unrotateFromVisTauMomPointsAlongZAxis(tau_orig_theta, tau_orig_phi, rot_four_vec_to_unrotate):  #recall that the inverse of a rotation matrix is its transpose, so unrotMatrix is just the transpose of rotMatrix
     unrotMatrix = np.array([
@@ -97,30 +97,31 @@ def unrotateFromVisTauMomPointsAlongZAxis(tau_orig_theta, tau_orig_phi, rot_four
     
 ##### test #####
 
-# v = TLorentzVector()
-# v.SetPxPyPzE(-3.6740152498,-2.79192430698,  21.6557548444, 22.1777103583)
-# print "Px,Py,Pz,E,M:", v.Px(), v.Py(), v.Pz(), v.E(), v.M()
-# print "tau_orig_theta, tau_orig_phi:", v.Theta(), v.Phi()
-# tau_orig_theta_test = v.Theta()
-# tau_orig_phi_test = v.Phi()
-# 
-# 
-# 
-#  
-# toPrint = rotateToVisTauMomPointsAlongZAxis(tau_orig_theta_test, tau_orig_phi_test, v)
-#  
-# print toPrint
-# 
-# newPx = toPrint.Px()
-# newPy = toPrint.Py()
-# newPz = toPrint.Pz()
-# newE = toPrint.E()
-# newM = toPrint.M()
-# newTheta = toPrint.Theta()
-# #newPhi = toPrint.Phi()
-# #newEta = toPrint.Eta()
-# 
-# print "new Px, Py, Pz, E, M, Theta, Phi, Theta:", newPx, newPy, newPz, newE, newM, newTheta
+v = TLorentzVector()
+v.SetPxPyPzE(-3.6740152498,-2.79192430698,  21.6557548444, 22.1777103583)
+#v.SetPxPyPzE(0,0,1,1)
+print "Px,Py,Pz,E,M:", v.Px(), v.Py(), v.Pz(), v.E(), v.M()
+print "tau_orig_theta, tau_orig_phi:", v.Theta(), v.Phi()
+tau_orig_theta_test = v.Theta()
+tau_orig_phi_test = v.Phi()
+
+
+
+ 
+toPrint = rotateToVisTauMomPointsAlongZAxis(tau_orig_theta_test, tau_orig_phi_test, v)
+ 
+print toPrint
+
+newPx = toPrint.Px()
+newPy = toPrint.Py()
+newPz = toPrint.Pz()
+newE = toPrint.E()
+newM = toPrint.M()
+newTheta = toPrint.Theta()
+#newPhi = toPrint.Phi()
+#newEta = toPrint.Eta()
+
+print "new Px, Py, Pz, E, M, Theta:", newPx, newPy, newPz, newE, newM, newTheta
 # 
 # v2 = TLorentzVector()
 # v2.SetPxPyPzE(8.881784197e-16,0.0,22.1419273613,22.1777103583)
