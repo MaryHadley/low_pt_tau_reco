@@ -13,6 +13,7 @@ import numpy as np
 import sys
 sys.stdout.flush()
 
+#################
 
 #Functions to rotate 4 vectors from global (aka lab frame) coordinates to local coordinates and to unrotate them from the local frame back to the global (aka lab) frame. They take angle (theta and/or phi information) and a four vector and return a four vector.
 
@@ -54,7 +55,54 @@ def rotateToVisTauMomPointsAlongZAxis(tau_orig_theta, tau_orig_phi, orig_four_ve
     local_4vec.SetPxPyPzE(tmp_rotated_Px, tmp_rotated_Py, tmp_rotated_Pz, tmp_E)
     
     return local_4vec
-     
+
+
+#####################
+ 
+#By applying the rotateToVisibleTauMomPointsAlongZAxis function, we move from the lab frame to the frame in which the visible tau momentum points in the z axis (as the function name implies). 
+#Now that we have gotten to this frame, we want to do another rotation, this one in just the xy plane (in which the sum of the momenta of the three charged pi is by definition 0).
+#We want to set the phi associated with the pion with the largest pT to be pi (equivalent to -pi) aka we want to have the largest pT pion point along the negative x axis. We will call the highest pT pion in this frame pion 1 (this is basically a definition).  
+#Below we define a function to rotate the pion and neutrino vectors to this frame, the rotateToLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX function
+#This function takes the phi of the lead pT pion in the visible tau momentum points along z frame and the four vector of the particle of interest in the visible tau momentum points along Z axis frame.
+
+
+def rotateToLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi, four_vec_in_VisTauMomPointsAlongZFrame_to_rotate):
+    rotToLeadPtPiPointsAlongNegXMatrix = np.array([
+    
+    [-(np.cos(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi)), -(np.sin(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi)), 0],
+    [np.sin(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi), -(np.cos(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi)), 0],
+    [0, 0, 1],
+    ])
+    
+    #protection to make sure things that really are zero get set to 0 and not 10^-17 or something
+    
+    for element in np.nditer(rotToLeadPtPiPointsAlongNegXMatrix, op_flags=['readwrite']):
+        if abs(element) < 10.**(-10):
+            element[...] = 0
+    
+    tmp_Px =  four_vec_in_VisTauMomPointsAlongZFrame_to_rotate.Px()
+    tmp_Py = four_vec_in_VisTauMomPointsAlongZFrame_to_rotate.Py()  
+    tmp_Pz = four_vec_in_VisTauMomPointsAlongZFrame_to_rotate.Pz()   
+    tmp_E = four_vec_in_VisTauMomPointsAlongZFrame_to_rotate.E()  
+    
+    tmp_PxPyPz_vec_in_VisTauMomPointsAlongZFrame_to_mult = [[tmp_Px], [tmp_Py], [tmp_Pz]]
+    
+    tmp_rotated_vec_in_VisTauMomPointsAlongZFrame = np.dot(rotToLeadPtPiPointsAlongNegXMatrix, tmp_PxPyPz_vec_in_VisTauMomPointsAlongZFrame_to_mult)
+    
+    tmp_rotated_vec_in_VisTauMomPointsAlongZFrame_Px = tmp_rotated_vec_in_VisTauMomPointsAlongZFrame[0]
+    tmp_rotated_vec_in_VisTauMomPointsAlongZFrame_Py = tmp_rotated_vec_in_VisTauMomPointsAlongZFrame[1]
+    tmp_rotated_vec_in_VisTauMomPointsAlongZFrame_Pz = tmp_rotated_vec_in_VisTauMomPointsAlongZFrame[2]
+    
+    final_local_4vec = ROOT.TLorentzVector()
+    final_local_4vec.SetPxPyPzE(tmp_rotated_vec_in_VisTauMomPointsAlongZFrame_Px,tmp_rotated_vec_in_VisTauMomPointsAlongZFrame_Py, tmp_rotated_vec_in_VisTauMomPointsAlongZFrame_Pz, tmp_E)
+    
+    return final_local_4vec 
+    
+
+#########
+
+def unrotateFromLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi, final_rotated_4vec_to_unrotate):
+    pass 
 #Function to unrotate the visible tau momentum (defined as the vector sum of the momenta vectors associated with the three charged pions in the decay) from pointing along the Z axis (aka theta = 0) and bring it back to the original lab frame
 #Takes the original theta and phi values associated with the visible tau momentum four vector and the rotated visible tau momentum four vector, returns the original tau momentum four vector in the lab frame.
 #My naming could be clearer, as this function can also take the visible tau original theta and phi and the pion and neutrino rotated four vectors. If it is given this info, it unrotates these four vectors and brings them back to living in the original lab frame.
