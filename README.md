@@ -9,7 +9,7 @@ Codes to preprocess CMS data of X --> tau tau --> ((3 charged pion plus >= 0 neu
 
 Preprocessing has been done in CMSSW_10_2_15 using the default python 2 version that comes with that release.
 
-Three versions of preprocessing code exist:
+Four versions of preprocessing code exist:
 
 1) a preprocessing code written by Willem and Shray (and Otto) that runs on the miniaod data tier. Matches gen level info to reco level info --> LowPtTauMatcher.py, to run:
 python LowPtTauMatcher.py inputFiles=your_input_file.root suffix=some_useful_tag_to_append_to_the_output_file, e.g. perhaps the name of the root file you are preprocessing
@@ -18,10 +18,12 @@ python LowPtTauMatcher.py inputFiles=your_input_file.root suffix=some_useful_tag
 
   
 3) a preprocessing code to run on the Gen Sim level data tier (and therefore by definition can only use gen level info) -->GenSimLowPtTauMatcher_noCheckForNeutralPiInDecayChainButPiPtCutIncl.py, to run: python GenSimLowPtTauMatcher_noCheckForNeutralPiInDecayChainButPiPtCutIncl.py inputFiles=your_input_file.root suffix=some_useful_tag_to_append_to_the_output_file, e.g. perhaps the name of the root file you are preprocessing
+
+4) a preprocessing code that converts all the four vector information into a local frame (UPGRADE DOCUMENTATION TO FULLY DESCRIBE THIS LATER)...this code currently  UNDER CONSTRUCTION
   
 Note that if you use the preprocessing codes that only use the gen information (so options 2 or 3 here), you will need to fiddle with the piPtCut setting depending on what mass point of the X parent sample you are using X --> tau tau --> ((3 charged pion plus >= 0 neutral pions plus a neutrino) times 2, one for each tau). For X = nominal mass of the upsilon particle (9.46 GeV), a piPtCut of 0.35 GeV seems to work. For X = 15 GeV, a piPtCut of 0.7 GeV is what is currently being used.
 
-Note that we have verified that training the model on gen level only info and then applying these gen-trained models to full miniaod test data does not result in a significant performance degredation.
+Note that we have verified that training the model on gen level only info and then applying these gen-trained models to full miniaod test data does not result in a significant performance degredation...this is only sort of true, see email that I sent to Greg for more details, TO BE RETURNED TO AT A LATER DATE.
   
  #Model
  
