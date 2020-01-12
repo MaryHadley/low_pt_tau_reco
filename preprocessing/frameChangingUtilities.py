@@ -23,10 +23,13 @@ sys.stdout.flush()
 #Takes the original theta and phi values associated with the visible tau momentum and the original visible tau momentum four vector, returns the four vector rotated so the visible tau momentum points along the Z axis.
 #My naming could be clearer, as this function can also take the visible tau original theta and phi and the pion and neutrino original four vectors. If it is given this info, it rotates these four vectors to live in the frame in which the visible tau momentum points along the Z axis.
 
+#Note that numpy requires all numbers in an array to be of the same type, it will automatically upcast ints to match the others, so we can write either 0. or 0 or 1. or 1 and it does NOT end up mattering 
+#See: https://jakevdp.github.io/PythonDataScienceHandbook/02.01-understanding-data-types.html  and https://stackoverflow.com/questions/51607607/why-do-numpy-array-turns-int-into-float for more about this
+
 def rotateToVisTauMomPointsAlongZAxis(tau_orig_theta, tau_orig_phi, orig_four_vec_to_rotate): #tau_orig here is the visible tau 
     rotMatrix = np.array([
     
-     [np.sin(tau_orig_phi), -np.cos(tau_orig_phi), 0],
+     [np.sin(tau_orig_phi), -np.cos(tau_orig_phi), 0.],
      [((np.cos(tau_orig_theta))*(np.cos(tau_orig_phi))), ((np.cos(tau_orig_theta))*(np.sin(tau_orig_phi))), -(np.sin(tau_orig_theta))], 
      [((np.sin(tau_orig_theta))*(np.cos(tau_orig_phi))), (np.sin(tau_orig_theta))*(np.sin(tau_orig_phi)), np.cos(tau_orig_theta)]
      
@@ -35,8 +38,8 @@ def rotateToVisTauMomPointsAlongZAxis(tau_orig_theta, tau_orig_phi, orig_four_ve
 
  # protection to make sure things that really are zero get set to 0 and not 10^-17 or something 
     for element in np.nditer(rotMatrix, op_flags=['readwrite']):
-        if abs(element) < 10.**(-10):
-            element[...] = 0
+        if abs(element) < 10.**(-10): #you do NOT need the ellipses for access, but you DO need them for assignment, as in the line below
+            element[...] = 0.
 #    print "rotMatrix after is:", rotMatrix        
     tmp_Px = orig_four_vec_to_rotate.Px()
     tmp_Py = orig_four_vec_to_rotate.Py()
@@ -46,7 +49,11 @@ def rotateToVisTauMomPointsAlongZAxis(tau_orig_theta, tau_orig_phi, orig_four_ve
     tmp_PxPyPz_vec_to_mult = [[tmp_Px], [tmp_Py], [tmp_Pz]]
    
     tmp_rotated_PxPyPz_vec = np.dot(rotMatrix, tmp_PxPyPz_vec_to_mult) #matrix multiplication of rotation matrix times original vector
-    
+#    print "tmp_rotated_PxPyPz_vec before is:", tmp_rotated_PxPyPz_vec
+    for entry in np.nditer(tmp_rotated_PxPyPz_vec, op_flags=['readwrite']):
+        if abs(entry) < 10.**(-10): #you do NOT need the ellipses for access, but you DO need them for assignment, as in the line below
+            entry[...] = 0
+#    print "tmp_rotated_PxPyPz_vec after is:", tmp_rotated_PxPyPz_vec        
     tmp_rotated_Px = tmp_rotated_PxPyPz_vec[0] #numpy vectors start labelling at 0, so 0th element is the first entry
     tmp_rotated_Py = tmp_rotated_PxPyPz_vec[1]
     tmp_rotated_Pz = tmp_rotated_PxPyPz_vec[2]
@@ -69,16 +76,16 @@ def rotateToVisTauMomPointsAlongZAxis(tau_orig_theta, tau_orig_phi, orig_four_ve
 def rotateToLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi, four_vec_in_VisTauMomPointsAlongZFrame_to_rotate):
     rotToLeadPtPiPointsAlongNegXMatrix = np.array([
     
-    [-(np.cos(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi)), -(np.sin(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi)), 0],
-    [np.sin(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi), -(np.cos(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi)), 0],
-    [0, 0, 1],
+    [-(np.cos(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi)), -(np.sin(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi)), 0.],
+    [np.sin(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi), -(np.cos(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi)), 0.],
+    [0., 0., 1.]
     ])
     
     #protection to make sure things that really are zero get set to 0 and not 10^-17 or something
     
     for element in np.nditer(rotToLeadPtPiPointsAlongNegXMatrix, op_flags=['readwrite']):
-        if abs(element) < 10.**(-10):
-            element[...] = 0
+        if abs(element) < 10.**(-10): #you do NOT need the ellipses for access, but you DO need them for assignment, as in the line below
+            element[...] = 0.
     
     tmp_Px =  four_vec_in_VisTauMomPointsAlongZFrame_to_rotate.Px()
     tmp_Py = four_vec_in_VisTauMomPointsAlongZFrame_to_rotate.Py()  
@@ -89,6 +96,10 @@ def rotateToLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX(lead_pt_pi_in_Vi
     
     tmp_rotated_vec_in_VisTauMomPointsAlongZFrame = np.dot(rotToLeadPtPiPointsAlongNegXMatrix, tmp_PxPyPz_vec_in_VisTauMomPointsAlongZFrame_to_mult)
     
+    for entry in np.nditer(tmp_rotated_vec_in_VisTauMomPointsAlongZFrame, op_flags=['readwrite']):
+        if abs(entry) < 10.**(-10): #you do NOT need the ellipses for access, but you DO need them for assignment, as in the line below
+            entry[...] = 0
+   
     tmp_rotated_vec_in_VisTauMomPointsAlongZFrame_Px = tmp_rotated_vec_in_VisTauMomPointsAlongZFrame[0]
     tmp_rotated_vec_in_VisTauMomPointsAlongZFrame_Py = tmp_rotated_vec_in_VisTauMomPointsAlongZFrame[1]
     tmp_rotated_vec_in_VisTauMomPointsAlongZFrame_Pz = tmp_rotated_vec_in_VisTauMomPointsAlongZFrame[2]
@@ -102,7 +113,40 @@ def rotateToLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX(lead_pt_pi_in_Vi
 #########
 
 def unrotateFromLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi, final_rotated_4vec_to_unrotate):
-    pass 
+    unrotFromLeadPtPiPointsAlongNegXMatrix = np.array([
+    
+    [-(np.cos(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi)),np.sin(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi),0 ],
+    [-(np.sin(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi)), -(np.cos(lead_pt_pi_in_VisTauMomPointsAlongZFrame_phi)), 0],
+    [0, 0, 1]
+    
+    
+    ])
+    
+    #protection to make sure things that really are zero get set to 0 and not 10^-17 or something
+    for unelement in np.nditer(unrotFromLeadPtPiPointsAlongNegXMatrix, op_flags=['readwrite']):
+        if abs(unelement)< 10.**(-10): #you do NOT need the ellipses for access, but you DO need them for assignment, as in the line below
+            unelement[...] = 0.
+    
+    
+    tmp_Px = final_rotated_4vec_to_unrotate.Px()
+    tmp_Py = final_rotated_4vec_to_unrotate.Py()
+    tmp_Pz = final_rotated_4vec_to_unrotate.Pz()
+    tmp_E = final_rotated_4vec_to_unrotate.E()
+    
+    tmp_PxPyPz_final_rotated_vec_to_unrotate_to_mult =  [[tmp_Px], [tmp_Py], [tmp_Pz]]
+    
+    tmp_unrotated_vec_in_VisTauMomPointsAlongZFrame = np.dot(unrotFromLeadPtPiPointsAlongNegXMatrix, tmp_PxPyPz_final_rotated_vec_to_unrotate_to_mult)
+    
+    tmp_unrotated_vec_in_VisTauMomPointsAlongZFrame_Px = tmp_unrotated_vec_in_VisTauMomPointsAlongZFrame[0]
+    tmp_unrotated_vec_in_VisTauMomPointsAlongZFrame_Py = tmp_unrotated_vec_in_VisTauMomPointsAlongZFrame[1]
+    tmp_unrotated_vec_in_VisTauMomPointsAlongZFrame_Pz = tmp_unrotated_vec_in_VisTauMomPointsAlongZFrame[2]
+    
+    unrotated_4_vec_in_VisTauMomPointsAlongZFrame = ROOT.TLorentzVector()
+    unrotated_4_vec_in_VisTauMomPointsAlongZFrame.SetPxPyPzE(tmp_unrotated_vec_in_VisTauMomPointsAlongZFrame_Px,tmp_unrotated_vec_in_VisTauMomPointsAlongZFrame_Py, tmp_unrotated_vec_in_VisTauMomPointsAlongZFrame_Pz, tmp_E)
+    
+    return unrotated_4_vec_in_VisTauMomPointsAlongZFrame
+    
+######################   
 #Function to unrotate the visible tau momentum (defined as the vector sum of the momenta vectors associated with the three charged pions in the decay) from pointing along the Z axis (aka theta = 0) and bring it back to the original lab frame
 #Takes the original theta and phi values associated with the visible tau momentum four vector and the rotated visible tau momentum four vector, returns the original tau momentum four vector in the lab frame.
 #My naming could be clearer, as this function can also take the visible tau original theta and phi and the pion and neutrino rotated four vectors. If it is given this info, it unrotates these four vectors and brings them back to living in the original lab frame.
@@ -119,8 +163,8 @@ def unrotateFromVisTauMomPointsAlongZAxis(tau_orig_theta, tau_orig_phi, rot_four
     # protection to make sure things that really are zero get set to 0 and not 10^-17 or something
     
     for unElement in np.nditer(unrotMatrix, op_flags=['readwrite']):
-        if abs(unElement) <  10.**(-10):
-            unElement[...] = 0
+        if abs(unElement) <  10.**(-10): #you do NOT need the ellipses for access, but you DO need them for assignment, as in the line below
+            unElement[...] = 0.
     
     tmp_Px = rot_four_vec_to_unrotate.Px()
     tmp_Py = rot_four_vec_to_unrotate.Py()
@@ -145,34 +189,35 @@ def unrotateFromVisTauMomPointsAlongZAxis(tau_orig_theta, tau_orig_phi, rot_four
     
 ##### test #####
 
-v = TLorentzVector()
-v.SetPxPyPzE(-3.6740152498,-2.79192430698,  21.6557548444, 22.1777103583)
-#v.SetPxPyPzE(0,0,1,1)
-print "Px,Py,Pz,E,M:", v.Px(), v.Py(), v.Pz(), v.E(), v.M()
-print "tau_orig_theta, tau_orig_phi:", v.Theta(), v.Phi()
-tau_orig_theta_test = v.Theta()
-tau_orig_phi_test = v.Phi()
-
-
-
- 
-toPrint = rotateToVisTauMomPointsAlongZAxis(tau_orig_theta_test, tau_orig_phi_test, v)
- 
-print toPrint
-
-newPx = toPrint.Px()
-newPy = toPrint.Py()
-newPz = toPrint.Pz()
-newE = toPrint.E()
-newM = toPrint.M()
-newTheta = toPrint.Theta()
-#newPhi = toPrint.Phi()
-#newEta = toPrint.Eta()
-
-print "new Px, Py, Pz, E, M, Theta:", newPx, newPy, newPz, newE, newM, newTheta
+# v = TLorentzVector()
+# v.SetPxPyPzE(-3.6740152498,-2.79192430698,  21.6557548444, 22.1777103583)
+# #v.SetPxPyPzE(0,0,1,1)
+# print "Px,Py,Pz,E,M:", v.Px(), v.Py(), v.Pz(), v.E(), v.M()
+# print '%.15f' %v.Px()
+# print "tau_orig_theta, tau_orig_phi:", v.Theta(), v.Phi()
+# tau_orig_theta_test = v.Theta()
+# tau_orig_phi_test = v.Phi()
+# 
+# 
+# 
+#  
+# toPrint = rotateToVisTauMomPointsAlongZAxis(tau_orig_theta_test, tau_orig_phi_test, v)
+#  
+# print toPrint
+# 
+# newPx = toPrint.Px()
+# newPy = toPrint.Py()
+# newPz = toPrint.Pz()
+# newE = toPrint.E()
+# newM = toPrint.M()
+# newTheta = toPrint.Theta()
+# #newPhi = toPrint.Phi()
+# #newEta = toPrint.Eta()
+# 
+# print "new Px, Py, Pz, E, M, Theta:", newPx, newPy, newPz, newE, newM, newTheta
 # 
 # v2 = TLorentzVector()
-# v2.SetPxPyPzE(8.881784197e-16,0.0,22.1419273613,22.1777103583)
+# v2.SetPxPyPzE(0.0,0.0,22.1419273613,22.1777103583)
 # 
 # toPrint2 = unrotateFromVisTauMomPointsAlongZAxis(tau_orig_theta_test, tau_orig_phi_test, v2)
 # 
@@ -185,3 +230,4 @@ print "new Px, Py, Pz, E, M, Theta:", newPx, newPy, newPz, newE, newM, newTheta
 # # # newPhi2   = toPrint2.Phi()
 # # # newEta2 = toPrint2.Eta()
 # print "new Px2, Py2, Pz2, E, M, Theta2:", newPx2, newPy2, newPz2, newE2, newM2, newTheta2
+print '%.15f' %newPx2
