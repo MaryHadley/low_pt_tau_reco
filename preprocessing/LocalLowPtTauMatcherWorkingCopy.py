@@ -208,6 +208,14 @@ branches.append("local_pi_p_lv3_pt")
 branches.append('local_taum_lv_mass')
 branches.append("local_taup_lv_mass")
 
+branches.append("initial_leadPt_pi_m_in_AllInZFrame_phi")
+branches.append("initial_leadPt_pi_p_in_AllInZFrame_phi")
+branches.append("toUse_local_taum_lv_mass")
+branches.append("toUse_local_taup_lv_mass")
+branches.append("toUse_local_pi_m_lv1_phi")
+branches.append("toUse_local_pi_p_lv1_phi")
+
+
 
 suffix = options.suffix
 print 'suffix is:', suffix
@@ -583,7 +591,7 @@ for event in events:
         break # this break takes you out of the overall upsilon loop
 
     nTot += 1
-#    if nTot > 50: break
+#    if nTot > 1000: break
     gen_taup_lv = TLorentzVector()
     gen_taup_lv.SetPtEtaPhiM(gen_taum[0].pt(), gen_taum[0].eta(), gen_taum[0].phi(), 0.139)
 
@@ -646,9 +654,9 @@ for event in events:
         print "vis_taum_lv.M() before rotation is:", vis_taum_lv.M()
         print "vis_taum_lv.E() before rotation is:", vis_taum_lv.E()
         
-        orig_vis_taum_theta = vis_taum_lv.Theta()
+        orig_vis_taum_theta = vis_taum_lv.Theta() #this is the theta before any rotation has been done, we need to save this
 #        print "orig_vis_taum_theta is:", orig_vis_taum_theta
-        orig_vis_taum_phi   = vis_taum_lv.Phi()
+        orig_vis_taum_phi   = vis_taum_lv.Phi() #this is the phi before any rotation has been done, we need to save this
         
         local_vis_taum_lv = rotateToVisTauMomPointsAlongZAxis(orig_vis_taum_theta, orig_vis_taum_phi, vis_taum_lv)
         print "after rotation stuff! local_vis_taum_lv.Px(), local_vis_taum_lv.Py(), local_vis_taum_lv.Pz(), local_vis_taum_lv.M(), local_vis_taum_lv.E():", local_vis_taum_lv.Px(), local_vis_taum_lv.Py(), local_vis_taum_lv.Pz(), local_vis_taum_lv.M(), local_vis_taum_lv.E()
@@ -695,6 +703,21 @@ for event in events:
         local_pi_m_lv2_mass = local_pi_m_lv2.M()
         local_pi_m_lv3_mass = local_pi_m_lv3.M()
         
+        #now we are in the so-called local frame, the frame in which the visible tau momentum points along z. 
+        #But we are not quite where we want to be yet, we still need to rotate so the lead pT pi in the local, vis tau mom points along Z frame points along neg x and everyone else lives in this world as well
+        #We will call this good frame that we want to get to the toUse_local blah blah
+        initial_leadPt_pi_m_in_AllInZFrame_phi = local_pi_m_lv1_phi # we will need this to do the unrotation
+        
+        toUse_local_pi_m_lv1 = rotateToLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX(initial_leadPt_pi_m_in_AllInZFrame_phi,local_pi_m_lv1)
+        print "toUse_local_pi_m_lv1.Px(), toUse_local_pi_m_lv1.Py() is:", toUse_local_pi_m_lv1.Px(), toUse_local_pi_m_lv1.Py()
+        #print "toUse_local_pi_m_lv1.Phi() is:", toUse_local_pi_m_lv1.Phi()
+        toUse_local_pi_m_lv1_phi = toUse_local_pi_m_lv1.Phi()
+        toUse_local_pi_m_lv2 = rotateToLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX(initial_leadPt_pi_m_in_AllInZFrame_phi,local_pi_m_lv2)
+        toUse_local_pi_m_lv3 = rotateToLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX(initial_leadPt_pi_m_in_AllInZFrame_phi,local_pi_m_lv3)
+        toUse_local_neu_lv =  rotateToLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX(initial_leadPt_pi_m_in_AllInZFrame_phi,local_neu_lv)
+        
+        toUse_local_taum_lv =  toUse_local_pi_m_lv1 + toUse_local_pi_m_lv2 + toUse_local_pi_m_lv3 + toUse_local_neu_lv
+        toUse_local_taum_lv_mass = toUse_local_taum_lv.M()
         # dog = vis_taum_lv
 #         print "dog.Pt()", dog.Pt() 
 #         #verified that doing it the long way, e.g. vis_taum_lv.Eta() etc, gives the same results as doing vis_taum_lv.Vect() and then accessing its components
@@ -858,6 +881,24 @@ for event in events:
         local_taup_lv = local_pi_p_lv1 + local_pi_p_lv2 + local_pi_p_lv3 + local_antineu_lv
         local_taup_lv_mass = local_taup_lv.M()
         
+        #now we are in the so-called local frame, the frame in which the visible tau momentum points along z. 
+        #But we are not quite where we want to be yet, we still need to rotate so the lead pT pi in the local, vis tau mom points along Z frame points along neg x and everyone else lives in this world as well
+        #We will call this good frame that we want to get to the toUse_local blah blah
+        
+        initial_leadPt_pi_p_in_AllInZFrame_phi = local_pi_p_lv1.Phi() # we will need this to do the unrotation
+        
+        toUse_local_pi_p_lv1 = rotateToLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX(initial_leadPt_pi_p_in_AllInZFrame_phi, local_pi_p_lv1)
+        toUse_local_pi_p_lv2 = rotateToLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX(initial_leadPt_pi_p_in_AllInZFrame_phi, local_pi_p_lv2)
+        toUse_local_pi_p_lv3 = rotateToLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX(initial_leadPt_pi_p_in_AllInZFrame_phi, local_pi_p_lv3)
+        toUse_local_antineu_lv = rotateToLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX(initial_leadPt_pi_p_in_AllInZFrame_phi, local_antineu_lv)
+        
+        toUse_local_pi_p_lv1_phi = toUse_local_pi_p_lv1.Phi()
+        
+        toUse_local_taup_lv = toUse_local_pi_p_lv1 + toUse_local_pi_p_lv2 + toUse_local_pi_p_lv3 + toUse_local_antineu_lv
+       
+        toUse_local_taup_lv_mass = toUse_local_taup_lv.M()
+        
+        
 #         """
 #         if(len(matched_photonp) != 0):
 #             print("Tagged ", len(matched_photonp) / 2, " pion neutral particles")
@@ -897,7 +938,7 @@ for event in events:
 #         """
     
 
-    if tag_upsilon: # one in from overall event loop
+    if tag_upsilon: # one in from overall event loop #these matched_pionblah are the unsorted and unrotated at all values...do we just want to have the cuts be done in this way to save time...I think it vaguely makes sense, check with Greg to get his opinion. Also this is nominal mass sample so maybe we want the cut to be 0.35
         if matched_pionm[0].pt() < 0.7 or matched_pionm[1].pt() < 0.7 or matched_pionm[2].pt() < 0.7 or matched_pionp[0].pt() < 0.7 or matched_pionp[1].pt() < 0.7 or matched_pionp[2].pt() < 0.7:
             print "one of the candidate pions failed the pT cut!"
             print "matched_pionm[0].pt() is:", matched_pionm[0].pt()
@@ -1032,6 +1073,13 @@ for event in events:
         tofill["local_pi_p_lv1_pt"]  = local_pi_p_lv1_pt
         tofill["local_pi_p_lv2_pt"]  = local_pi_p_lv2_pt   
         tofill["local_pi_p_lv3_pt"]  = local_pi_p_lv3_pt
+        
+        tofill["initial_leadPt_pi_m_in_AllInZFrame_phi"] =  initial_leadPt_pi_m_in_AllInZFrame_phi
+        tofill["initial_leadPt_pi_p_in_AllInZFrame_phi"] =  initial_leadPt_pi_p_in_AllInZFrame_phi
+        tofill["toUse_local_taum_lv_mass"] = toUse_local_taum_lv_mass
+        tofill['toUse_local_taup_lv_mass'] = toUse_local_taup_lv_mass
+        tofill["toUse_local_pi_m_lv1_phi"] = toUse_local_pi_m_lv1_phi
+        tofill['toUse_local_pi_p_lv1_phi'] = toUse_local_pi_p_lv1_phi
         
         ntuple.Fill(array('f', tofill.values()))      
 #        print 'ntuple is:', ntuple 
