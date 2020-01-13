@@ -187,7 +187,8 @@ branches.append('antineutrino_phi')
 branches.append('antineutrino_eta')
 
 #branches.append('vis_taum_eta')
-branches.append('orig_vis_taum_phi')
+#things to save to do the rotations and unrotations
+branches.append('orig_vis_taum_phi') 
 branches.append('orig_vis_taum_theta')
 branches.append("orig_vis_taup_phi")
 branches.append("orig_vis_taup_theta")
@@ -208,12 +209,49 @@ branches.append("local_pi_p_lv3_pt")
 branches.append('local_taum_lv_mass')
 branches.append("local_taup_lv_mass")
 
+#another two things to save to do the rotations and unrotations
 branches.append("initial_leadPt_pi_m_in_AllInZFrame_phi")
 branches.append("initial_leadPt_pi_p_in_AllInZFrame_phi")
+####
+
+#things to use with the DNN in the toUse frame: for every pion and neutrino, we need toUse_pt, toUse_theta, toUse_phi
 branches.append("toUse_local_taum_lv_mass")
 branches.append("toUse_local_taup_lv_mass")
-branches.append("toUse_local_pi_m_lv1_phi")
-branches.append("toUse_local_pi_p_lv1_phi")
+#toUse phi info
+branches.append("toUse_local_pi_m_lv1_phi") #always pi
+branches.append("toUse_local_pi_p_lv1_phi") #always pi
+
+#toUse pT info
+branches.append("toUse_local_pi_m_lv1_pt")
+branches.append("toUse_local_pi_m_lv2_pt")
+branches.append("toUse_local_pi_m_lv3_pt")
+branches.append("toUse_local_neu_lv_pt")
+
+branches.append("toUse_local_pi_p_lv1_pt")
+branches.append("toUse_local_pi_p_lv2_pt")
+branches.append("toUse_local_pi_p_lv3_pt")
+branches.append("toUse_local_antineu_lv_pt")
+
+#toUse theta info
+
+branches.append("toUse_local_pi_m_lv1_theta")
+branches.append("toUse_local_pi_m_lv2_theta")
+branches.append("toUse_local_pi_m_lv3_theta")
+branches.append("toUse_local_neu_lv_theta")
+
+branches.append("toUse_local_pi_p_lv1_theta")
+branches.append("toUse_local_pi_p_lv2_theta")
+branches.append("toUse_local_pi_p_lv3_theta")
+branches.append("toUse_local_antineu_lv_theta")
+
+branches.append("toUse_local_pi_m_lv2_phi")
+branches.append("toUse_local_pi_m_lv3_phi")
+
+branches.append("toUse_local_pi_p_lv2_phi")
+branches.append("toUse_local_pi_p_lv3_phi")
+
+branches.append("check1_mass")
+branches.append("check2_mass")
 
 
 
@@ -239,6 +277,8 @@ pion_id = 211
 tau_neu_id = 16
 neutral_pion_id = 111
 photon_id = 22
+
+piPtCut = 0.35
 
 # Events takes either
 # - single file name
@@ -591,7 +631,7 @@ for event in events:
         break # this break takes you out of the overall upsilon loop
 
     nTot += 1
-#    if nTot > 1000: break
+#    if nTot > 100: break
     gen_taup_lv = TLorentzVector()
     gen_taup_lv.SetPtEtaPhiM(gen_taum[0].pt(), gen_taum[0].eta(), gen_taum[0].phi(), 0.139)
 
@@ -622,9 +662,9 @@ for event in events:
     vis_taum_lv = TLorentzVector()
     vis_taup_lv = TLorentzVector()
     
-    tmp_local_pi_m_lv1 = TLorentzVector()
-    tmp_local_pi_m_lv2 = TLorentzVector()
-    tmp_local_pi_m_lv3 = TLorentzVector()
+#    tmp_local_pi_m_lv1 = TLorentzVector()
+#    tmp_local_pi_m_lv2 = TLorentzVector()
+#    tmp_local_pi_m_lv3 = TLorentzVector()
     
     
     
@@ -716,8 +756,34 @@ for event in events:
         toUse_local_pi_m_lv3 = rotateToLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX(initial_leadPt_pi_m_in_AllInZFrame_phi,local_pi_m_lv3)
         toUse_local_neu_lv =  rotateToLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX(initial_leadPt_pi_m_in_AllInZFrame_phi,local_neu_lv)
         
+        toUse_local_pi_m_lv1_pt =  toUse_local_pi_m_lv1.Pt()
+        toUse_local_pi_m_lv2_pt =  toUse_local_pi_m_lv2.Pt()
+        toUse_local_pi_m_lv3_pt =  toUse_local_pi_m_lv3.Pt()
+        toUse_local_neu_lv_pt =    toUse_local_neu_lv.Pt()
+        
+        toUse_local_pi_m_lv1_theta = toUse_local_pi_m_lv1.Theta()
+        toUse_local_pi_m_lv2_theta = toUse_local_pi_m_lv2.Theta()
+        toUse_local_pi_m_lv3_theta = toUse_local_pi_m_lv3.Theta()
+        toUse_local_neu_lv_theta = toUse_local_neu_lv.Theta()
+        
+#        print "toUse_local_pi_m_lv2 phi before is:", toUse_local_pi_m_lv2.Phi()
+        toUse_local_pi_m_lv2_phi = get_toUse_local_phi(toUse_local_pi_m_lv2)
+#        print "toUse_local_pi_m_lv2_phi after is:", toUse_local_pi_m_lv2_phi
+        toUse_local_pi_m_lv2.SetPhi(toUse_local_pi_m_lv2_phi)
+#        print "toUse_local_pi_m_lv2.Phi()", toUse_local_pi_m_lv2.Phi()
+#        print "toUse_local_pi_m_lv2.Pt() after", toUse_local_pi_m_lv2.Pt()
+
+        toUse_local_pi_m_lv3_phi = get_toUse_local_phi(toUse_local_pi_m_lv3)
+        toUse_local_pi_m_lv3.SetPhi(toUse_local_pi_m_lv3_phi)
+
+        
+        
         toUse_local_taum_lv =  toUse_local_pi_m_lv1 + toUse_local_pi_m_lv2 + toUse_local_pi_m_lv3 + toUse_local_neu_lv
         toUse_local_taum_lv_mass = toUse_local_taum_lv.M()
+        check1 =  unrotateFromLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX(initial_leadPt_pi_m_in_AllInZFrame_phi,toUse_local_taum_lv)
+        check1_mass = check1.M()
+        check2 = unrotateFromVisTauMomPointsAlongZAxis(orig_vis_taum_theta,orig_vis_taum_phi, check1)
+        check2_mass = check2.M()
         # dog = vis_taum_lv
 #         print "dog.Pt()", dog.Pt() 
 #         #verified that doing it the long way, e.g. vis_taum_lv.Eta() etc, gives the same results as doing vis_taum_lv.Vect() and then accessing its components
@@ -894,6 +960,23 @@ for event in events:
         
         toUse_local_pi_p_lv1_phi = toUse_local_pi_p_lv1.Phi()
         
+        toUse_local_pi_p_lv1_pt = toUse_local_pi_p_lv1.Pt()
+        toUse_local_pi_p_lv2_pt = toUse_local_pi_p_lv2.Pt()
+        toUse_local_pi_p_lv3_pt = toUse_local_pi_p_lv3.Pt()
+        toUse_local_antineu_lv_pt = toUse_local_antineu_lv.Pt()
+        
+        toUse_local_pi_p_lv1_theta = toUse_local_pi_p_lv1.Theta()
+        toUse_local_pi_p_lv2_theta = toUse_local_pi_p_lv2.Theta()
+        toUse_local_pi_p_lv3_theta = toUse_local_pi_p_lv3.Theta()
+        toUse_local_antineu_lv_theta = toUse_local_antineu_lv.Theta()
+        
+        toUse_local_pi_p_lv2_phi = get_toUse_local_phi(toUse_local_pi_p_lv2)
+        toUse_local_pi_p_lv2.SetPhi(toUse_local_pi_p_lv2_phi)
+        
+        toUse_local_pi_p_lv3_phi = get_toUse_local_phi(toUse_local_pi_p_lv3)
+        toUse_local_pi_p_lv3.SetPhi(toUse_local_pi_p_lv3_phi)
+        
+        
         toUse_local_taup_lv = toUse_local_pi_p_lv1 + toUse_local_pi_p_lv2 + toUse_local_pi_p_lv3 + toUse_local_antineu_lv
        
         toUse_local_taup_lv_mass = toUse_local_taup_lv.M()
@@ -939,7 +1022,7 @@ for event in events:
     
 
     if tag_upsilon: # one in from overall event loop #these matched_pionblah are the unsorted and unrotated at all values...do we just want to have the cuts be done in this way to save time...I think it vaguely makes sense, check with Greg to get his opinion. Also this is nominal mass sample so maybe we want the cut to be 0.35
-        if matched_pionm[0].pt() < 0.7 or matched_pionm[1].pt() < 0.7 or matched_pionm[2].pt() < 0.7 or matched_pionp[0].pt() < 0.7 or matched_pionp[1].pt() < 0.7 or matched_pionp[2].pt() < 0.7:
+        if matched_pionm[0].pt() < piPtCut or matched_pionm[1].pt() < piPtCut or matched_pionm[2].pt() < piPtCut or matched_pionp[0].pt() < piPtCut or matched_pionp[1].pt() < piPtCut or matched_pionp[2].pt() < piPtCut:
             print "one of the candidate pions failed the pT cut!"
             print "matched_pionm[0].pt() is:", matched_pionm[0].pt()
             print "matched_pionm[1].pt() is:", matched_pionm[1].pt()
@@ -1080,6 +1163,39 @@ for event in events:
         tofill['toUse_local_taup_lv_mass'] = toUse_local_taup_lv_mass
         tofill["toUse_local_pi_m_lv1_phi"] = toUse_local_pi_m_lv1_phi
         tofill['toUse_local_pi_p_lv1_phi'] = toUse_local_pi_p_lv1_phi
+        
+        #toUse pT stuff
+        
+        tofill["toUse_local_pi_m_lv1_pt"] = toUse_local_pi_m_lv1_pt
+        tofill["toUse_local_pi_m_lv2_pt"] = toUse_local_pi_m_lv2_pt
+        tofill["toUse_local_pi_m_lv3_pt"] = toUse_local_pi_m_lv3_pt
+        tofill["toUse_local_neu_lv_pt"]   = toUse_local_neu_lv_pt
+        
+        tofill["toUse_local_pi_p_lv1_pt"] = toUse_local_pi_p_lv1_pt 
+        tofill["toUse_local_pi_p_lv2_pt"] = toUse_local_pi_p_lv2_pt 
+        tofill["toUse_local_pi_p_lv3_pt"] = toUse_local_pi_p_lv3_pt 
+        tofill["toUse_local_antineu_lv_pt"] =  toUse_local_antineu_lv_pt
+        
+        #toUse theta stuff
+        
+        tofill["toUse_local_pi_m_lv1_theta"] = toUse_local_pi_m_lv1_theta
+        tofill["toUse_local_pi_m_lv2_theta"] = toUse_local_pi_m_lv2_theta
+        tofill["toUse_local_pi_m_lv3_theta"] = toUse_local_pi_m_lv3_theta
+        tofill["toUse_local_neu_lv_theta"] =   toUse_local_neu_lv_theta
+        
+        tofill["toUse_local_pi_p_lv1_theta"] = toUse_local_pi_p_lv1_theta
+        tofill["toUse_local_pi_p_lv2_theta"] = toUse_local_pi_p_lv2_theta
+        tofill["toUse_local_pi_p_lv3_theta"] = toUse_local_pi_p_lv3_theta
+        tofill["toUse_local_antineu_lv_theta"] = toUse_local_antineu_lv_theta
+        
+        tofill["toUse_local_pi_m_lv2_phi"] = toUse_local_pi_m_lv2_phi
+        tofill["toUse_local_pi_m_lv3_phi"] = toUse_local_pi_m_lv3_phi
+        
+        tofill["toUse_local_pi_p_lv2_phi"] = toUse_local_pi_p_lv2_phi
+        tofill["toUse_local_pi_p_lv3_phi"] = toUse_local_pi_p_lv3_phi
+        
+        tofill["check1_mass"] = check1_mass #check1_mass and check2_mass give back the taum mass, as they should
+        tofill["check2_mass"] = check2_mass #so unrotation works out!
         
         ntuple.Fill(array('f', tofill.values()))      
 #        print 'ntuple is:', ntuple 
