@@ -69,8 +69,9 @@ antitau_label_names = [
 #create what I will need to do the conversion
 antitau_to_unrotate_info = [] #TO DO!!!
 
-file  = uproot.open("cartesian_upsilon_taus_.root")["tree"] #test file
- 
+#file  = uproot.open("cartesian_upsilon_taus_.root")["tree"] #test file
+file = uproot.open("CUT_nomMass_from_Otto.root")["tree"]
+
 tau_features = []
 tau_labels = []
 antitau_features = []
@@ -104,19 +105,19 @@ print ("antitau_to_unrotate_info is:", antitau_to_unrotate_info)
 
 tau_features = np.transpose(np.array(tau_features))
 tau_features_test = tau_features[int(0.9 * tau_features.shape[0]):, :]
-print ("tau_features_test.shape", tau_features_test.shape)
+#print ("tau_features_test.shape", tau_features_test.shape)
 
 tau_labels = np.transpose(np.array(tau_labels))
 tau_labels_test = tau_labels[int(0.9 * tau_labels.shape[0]):, :]
-print ("tau_labels_test.shape", tau_labels_test.shape)
+#print ("tau_labels_test.shape", tau_labels_test.shape)
 
 antitau_features = np.transpose(np.array(antitau_features))
 antitau_features_test = antitau_features[int(0.9 * antitau_features.shape[0]):, :]
-print ("antitau_features_test.shape", antitau_features_test.shape)
+#print ("antitau_features_test.shape", antitau_features_test.shape)
 
 antitau_labels = np.transpose(np.array(antitau_labels))
 antitau_labels_test = antitau_labels[int(0.9 * antitau_labels.shape[0]):, :]
-print ("antitau_labels_test.shape", antitau_labels_test.shape)
+#print ("antitau_labels_test.shape", antitau_labels_test.shape)
 
 branches = [
     'tau_pt',
@@ -143,8 +144,10 @@ branches = [
     'upsilon_theta_no_neutrino',
     'upsilon_phi_no_neutrino',
     'upsilon_mass_no_neutrino',
+    'upsilon_theta_no_neutrino',
+    'upsilon_theta'
 ]
-file_out = ROOT.TFile('local_test_15Jan2020.root', 'recreate')
+file_out = ROOT.TFile('debug_16Jan2020.root', 'recreate')
 file_out.cd()
 
 tofill = OrderedDict(zip(branches, [-99.] * len(branches)))
@@ -159,11 +162,11 @@ masses = ROOT.TNtuple('tree', 'tree', ':'.join(branches))
 
 
 big_features_test = np.concatenate((tau_features_test, antitau_features_test))
-print ("big_features_test.shape is:", big_features_test.shape)
+#print ("big_features_test.shape is:", big_features_test.shape)
 
 
 big_labels_test = np.concatenate((tau_labels_test, antitau_labels_test))
-print ("big_labels_test.shape is:", big_labels_test.shape)
+#print ("big_labels_test.shape is:", big_labels_test.shape)
 
 big_model = tf.keras.models.load_model('big_local_model_14Jan2020.hdf5')
 
@@ -171,8 +174,8 @@ big_pred = big_model.predict(
     big_features_test
  )
 
-print ("big_pred is:", big_pred)
-print ("big_pred.shape is:", big_pred.shape)
+#print ("big_pred is:", big_pred)
+#print ("big_pred.shape is:", big_pred.shape)
 
 
 # 
@@ -363,20 +366,20 @@ print ('mean_error for nu phi is:', mean_error)
 # 
 # split big_pred into tau_pred and anti_pred so I don't have to change the indexing too much
 split_the_pred = np.split(big_pred, 2)
-print ("split_the_pred is:", split_the_pred)
+#print ("split_the_pred is:", split_the_pred)
 pred = split_the_pred[0]
 anti_pred = split_the_pred[1]
-print ("pred is:", pred)
-print ("pred.shape is:", pred.shape)
-print ("anti_pred is:", anti_pred)
-print ("anti_pred.shape is:", anti_pred.shape)
-print("tau_features_test.shape is:", tau_features_test.shape)
+#print ("pred is:", pred)
+#print ("pred.shape is:", pred.shape)
+#print ("anti_pred is:", anti_pred)
+#print ("anti_pred.shape is:", anti_pred.shape)
+#print("tau_features_test.shape is:", tau_features_test.shape)
 
 
 #change pred to being pt ETA phi as opposed to pt THETA phi so we can use the SetPtEtaPhiM method
 def arr_get_eta(theta_value):
-    theta = -np.log(0.5*theta_value)
-    return theta
+    myEta = -np.log(0.5*theta_value)
+    return myEta
     
 pred[:,1] = arr_get_eta(pred[:,1])
 print("dog! pred is:", pred)
@@ -394,6 +397,19 @@ antitau_features_test[:,7]=arr_get_eta(antitau_features_test[:,7])
 print("Hungarian Horntail! Mary testing!")
 #v = Math.Root.LorentzVector()
 
+print("pred.shape is:", pred.shape)
+print("tau_to_unrotate_info.shape is:", tau_to_unrotate_info.shape)
+print("tau_to_unrotate_info", tau_to_unrotate_info)
+#BE CAREFUL!!!
+#Get the CORRECT theta phi info...remember, you are using the last 10% of the events to define the test
+#Therefore, you need the last 10% of the events from the full unrotate info matrix
+
+tau_to_unrotate_info_to_use = tau_to_unrotate_info[int(0.9 * tau_to_unrotate_info.shape[0]):, :] #Get last 10%!
+print("tau_to_unrotate_info_to_use.shape is:", tau_to_unrotate_info_to_use.shape)
+print("tau_to_unrotate_info_to_use is:", tau_to_unrotate_info_to_use)
+
+antitau_to_unrotate_info_to_use = antitau_to_unrotate_info[int(0.9 * antitau_to_unrotate_info.shape[0]):, :] #Get the last 10%!
+
 for event in range(pred.shape[0]):
     tau_lorentz_no_neutrino = TLorentzVector()
 #    firedCount = 0
@@ -407,7 +423,7 @@ for event in range(pred.shape[0]):
         )
         print( (-np.log(0.5*(tau_features_test[event][index + 1]))))
         tau_lorentz_no_neutrino += lorentz
-        #print ("I fired")
+        print ("I fired")
         #firedCount += 1
     tofill['tau_pt_no_neutrino'] = tau_lorentz_no_neutrino.Pt()
     print("tau_lorentz_neutrino.Px()", tau_lorentz_no_neutrino.Px())
@@ -419,6 +435,7 @@ for event in range(pred.shape[0]):
     tofill['tau_mass_no_neutrino'] = tau_lorentz_no_neutrino.M()
     print ("tau_mass_no_neutrino", tau_lorentz_no_neutrino.M())
     print("tau_eta_no_neutrino", tau_lorentz_no_neutrino.Eta())
+    
     tau_lorentz = TLorentzVector()
     tau_lorentz.SetPxPyPzE(
         tau_lorentz_no_neutrino.Px(),
@@ -453,8 +470,23 @@ for event in range(pred.shape[0]):
     tofill['tau_eta'] = tau_lorentz.Eta()
     tofill['tau_phi'] = tau_lorentz.Phi()
     tofill['tau_mass'] = tau_lorentz.M()
-    print ("tau_lorentz.M()", tau_lorentz.M())
-
+    print ("poodle tau_lorentz.M()", tau_lorentz.M())
+    print("tau_lorentz.Pt()", tau_lorentz.Pt())
+    print("tau_lorentz.Eta()", tau_lorentz.Eta())
+    print("tau_lorentz.Phi()",tau_lorentz.Phi())
+    print("tau_lorentz.Theta()", tau_lorentz.Theta())
+    
+    #begin unrotation 
+    for index in range(0, tau_to_unrotate_info.shape[1],3):
+        almost_in_lab_frame_tau_lorentz =unrotateFromLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX((tau_to_unrotate_info_to_use[event][index]), tau_lorentz)
+        print (" poodle almost_in_lab_frame_tau_lorentz.M() is:",  almost_in_lab_frame_tau_lorentz.M())
+        lab_frame_tau_lorentz = unrotateFromVisTauMomPointsAlongZAxis((tau_to_unrotate_info_to_use[event][index+1]),(tau_to_unrotate_info_to_use[event][index+2]), almost_in_lab_frame_tau_lorentz)
+        print ("poodle lab_frame_tau_lorentz.M() is:", lab_frame_tau_lorentz.M())
+        almost_in_lab_frame_tau_lorentz_no_neutrino = unrotateFromLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX((tau_to_unrotate_info_to_use[event][index]), tau_lorentz_no_neutrino)
+        print("poodle almost_in_lab_frame_tau_lorentz_no_neutrino.M() is:", almost_in_lab_frame_tau_lorentz_no_neutrino.M())
+        lab_frame_tau_lorentz_no_neutrino = unrotateFromVisTauMomPointsAlongZAxis((tau_to_unrotate_info_to_use[event][index+1]),(tau_to_unrotate_info_to_use[event][index+2]), almost_in_lab_frame_tau_lorentz_no_neutrino)
+        print ("poodle lab_frame_tau_lorentz_no_neutrino.M() is:", lab_frame_tau_lorentz_no_neutrino.M())
+   
     antitau_lorentz_no_neutrino = TLorentzVector()
 
     for index in range(0, tau_features_test.shape[1], 3):
@@ -494,22 +526,38 @@ for event in range(pred.shape[0]):
     tofill['antitau_eta'] = antitau_lorentz.Eta()
     tofill['antitau_phi'] = antitau_lorentz.Phi()
     tofill['antitau_mass'] = antitau_lorentz.M()
-
-  #   upsilon_lorentz = tau_lorentz + antitau_lorentz
-#     upsilon_lorentz_no_neutrino = tau_lorentz_no_neutrino + antitau_lorentz_no_neutrino
+    
+    #begin unrotation 
+    for index in range(0, antitau_to_unrotate_info.shape[1],3):
+        almost_in_lab_frame_antitau_lorentz =unrotateFromLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX((antitau_to_unrotate_info_to_use[event][index]), antitau_lorentz)
+        print (" poodle almost_in_lab_frame_antitau_lorentz.M() is:",  almost_in_lab_frame_antitau_lorentz.M())
+        lab_frame_antitau_lorentz = unrotateFromVisTauMomPointsAlongZAxis((antitau_to_unrotate_info_to_use[event][index+1]),(antitau_to_unrotate_info_to_use[event][index+2]), almost_in_lab_frame_antitau_lorentz)
+        print ("poodle lab_frame_antitau_lorentz.M() is:", lab_frame_antitau_lorentz.M())
+        almost_in_lab_frame_antitau_lorentz_no_neutrino = unrotateFromLeadPtPiInVisTauMomPointsAlongZFramePointsAlongNegX((antitau_to_unrotate_info_to_use[event][index]), antitau_lorentz_no_neutrino)
+        print("poodle almost_in_lab_frame_antitau_lorentz_no_neutrino.M() is:", almost_in_lab_frame_antitau_lorentz_no_neutrino.M())
+        lab_frame_antitau_lorentz_no_neutrino = unrotateFromVisTauMomPointsAlongZAxis((antitau_to_unrotate_info_to_use[event][index+1]),(antitau_to_unrotate_info_to_use[event][index+2]), almost_in_lab_frame_antitau_lorentz_no_neutrino)
+        print ("poodle lab_frame_antitau_lorentz_no_neutrino.M() is:", lab_frame_antitau_lorentz_no_neutrino.M())
+    
+    lab_frame_upsilon_lorentz = lab_frame_tau_lorentz + lab_frame_antitau_lorentz
+    lab_frame_upsilon_lorentz_no_neutrino = lab_frame_tau_lorentz_no_neutrino + lab_frame_antitau_lorentz_no_neutrino
+    print ("lab_frame_upsilon_lorentz_no_neutrino.M() is:", lab_frame_upsilon_lorentz_no_neutrino.M())
+    print("lab_frame_upsilon_lorentz_no_neutrino.Px, Py, Pz, E is:", lab_frame_upsilon_lorentz_no_neutrino.Px(), lab_frame_upsilon_lorentz_no_neutrino.Py(), lab_frame_upsilon_lorentz_no_neutrino.Pz(), lab_frame_upsilon_lorentz_no_neutrino.E())
 # 
-#     tofill['upsilon_pt_no_neutrino'] = upsilon_lorentz_no_neutrino.Pt()
-#     tofill['upsilon_eta_no_neutrino'] = upsilon_lorentz_no_neutrino.Eta()
-#     tofill['upsilon_phi_no_neutrino'] = upsilon_lorentz_no_neutrino.Phi()
-#     tofill['upsilon_mass_no_neutrino'] = upsilon_lorentz_no_neutrino.M()
-#     tofill['upsilon_pt'] = upsilon_lorentz.Pt()
-#     tofill['upsilon_eta'] = upsilon_lorentz.Eta()
-#     tofill['upsilon_phi'] = upsilon_lorentz.Phi()
-#     tofill['upsilon_mass'] = upsilon_lorentz.M()
+    tofill['upsilon_pt_no_neutrino'] = lab_frame_upsilon_lorentz_no_neutrino.Pt()
+    tofill['upsilon_eta_no_neutrino'] = lab_frame_upsilon_lorentz_no_neutrino.Eta()
+    tofill['upsilon_phi_no_neutrino'] = lab_frame_upsilon_lorentz_no_neutrino.Phi()
+    tofill['upsilon_mass_no_neutrino'] = lab_frame_upsilon_lorentz_no_neutrino.M()
+    tofill['upsilon_pt'] = lab_frame_upsilon_lorentz.Pt()
+    tofill['upsilon_eta'] = lab_frame_upsilon_lorentz.Eta()
+    tofill['upsilon_phi'] = lab_frame_upsilon_lorentz.Phi()
+    tofill['upsilon_mass'] = lab_frame_upsilon_lorentz.M()
+    tofill['upsilon_theta_no_neutrino'] = lab_frame_upsilon_lorentz_no_neutrino.Theta()
+    tofill['upsilon_theta']             = lab_frame_upsilon_lorentz.Theta()
 
     masses.Fill(array('f', tofill.values()))
 #    print ("firedCount is:", firedCount)
 file_out.cd()
 masses.Write()
 file_out.Close()
+
 
