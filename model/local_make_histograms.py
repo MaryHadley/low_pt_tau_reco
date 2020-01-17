@@ -378,7 +378,7 @@ anti_pred = split_the_pred[1]
 
 #change pred to being pt ETA phi as opposed to pt THETA phi so we can use the SetPtEtaPhiM method
 def arr_get_eta(theta_value):
-    myEta = -np.log(0.5*theta_value)
+    myEta = -np.log(np.tan(0.5*theta_value))
     return myEta
     
 pred[:,1] = arr_get_eta(pred[:,1])
@@ -559,5 +559,4 @@ for event in range(pred.shape[0]):
 file_out.cd()
 masses.Write()
 file_out.Close()
-
 
