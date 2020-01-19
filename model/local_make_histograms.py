@@ -31,7 +31,7 @@ tau_to_unrotate_info_names = [
      b'initial_leadPt_pi_m_in_AllInZFrame_phi',
      b'orig_vis_taum_theta',
      b'orig_vis_taum_phi'
-     ]  #TO DO!!!
+     ] 
 
 
 
@@ -67,7 +67,7 @@ antitau_label_names = [
 ]
 
 #create what I will need to do the conversion
-antitau_to_unrotate_info = [] #TO DO!!!
+
 
 #file  = uproot.open("cartesian_upsilon_taus_.root")["tree"] #test file
 file = uproot.open("CUT_nomMass_from_Otto.root")["tree"]
@@ -147,7 +147,7 @@ branches = [
     'upsilon_theta_no_neutrino',
     'upsilon_theta'
 ]
-file_out = ROOT.TFile('debug_16Jan2020.root', 'recreate')
+file_out = ROOT.TFile('local_model_outputs_17Jan2020.root', 'recreate')
 file_out.cd()
 
 tofill = OrderedDict(zip(branches, [-99.] * len(branches)))
@@ -338,7 +338,7 @@ for x in range(big_labels_test.shape[0]):
     total_error += error
 # 
 max_error =max_error
-mean_error = total_error/tau_labels_test.shape[0]
+mean_error = total_error/big_labels_test.shape[0]
 # 
 print ('max_error for nu phi is:', max_error)
 print ('mean_error for nu phi is:', mean_error)
@@ -366,7 +366,7 @@ print ('mean_error for nu phi is:', mean_error)
 # 
 # split big_pred into tau_pred and anti_pred so I don't have to change the indexing too much
 split_the_pred = np.split(big_pred, 2)
-#print ("split_the_pred is:", split_the_pred)
+print ("split_the_pred is:", split_the_pred)
 pred = split_the_pred[0]
 anti_pred = split_the_pred[1]
 #print ("pred is:", pred)
@@ -375,11 +375,12 @@ anti_pred = split_the_pred[1]
 #print ("anti_pred.shape is:", anti_pred.shape)
 #print("tau_features_test.shape is:", tau_features_test.shape)
 
-
+print ("pred before is", pred)
 #change pred to being pt ETA phi as opposed to pt THETA phi so we can use the SetPtEtaPhiM method
 def arr_get_eta(theta_value):
     myEta = -np.log(np.tan(0.5*theta_value))
     return myEta
+    
     
 pred[:,1] = arr_get_eta(pred[:,1])
 print("dog! pred is:", pred)
@@ -421,7 +422,7 @@ for event in range(pred.shape[0]):
         (tau_features_test[event][index + 2]),
         (0.139)
         )
-        print( (-np.log(0.5*(tau_features_test[event][index + 1]))))
+
         tau_lorentz_no_neutrino += lorentz
         print ("I fired")
         #firedCount += 1
@@ -559,4 +560,5 @@ for event in range(pred.shape[0]):
 file_out.cd()
 masses.Write()
 file_out.Close()
+
 
