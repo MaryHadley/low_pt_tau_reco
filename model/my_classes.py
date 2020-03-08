@@ -1,19 +1,21 @@
-#Creating the class DataGenerator, which will allow us to feed our data in managable bites to our training so that we can train on 100ks/millions of examples without having the training fail as a result of memory issues
+#Creating the class DataGenerator, which will allow us to feed our data in managable bites 
+#to our training so that we can train on 100ks/millions of examples without having the training fail as a result of memory issues
 #Example here: https://stanford.edu/~shervine/blog/keras-how-to-generate-data-on-the-fly and thanks also to Bjorn for input
 
 import numpy as np
+import tensorflow 
 import keras
+from tensorflow.python.keras.utils.data_utils import Sequence
 
-class DataGenerator(keras.utils.Sequence):
+class DataGenerator(Sequence):
     """Generates manageable size chunks of data for keras."""
-    def __init__(self, list_IDs, labels, batch_size, dim, num_of_labels, shuffle=True): #I may want to feed some place holder/default values in here
+    def __init__(self, list_IDs, batch_size, dim, num_of_labels, shuffle=True): #I do not think I need labels #I may want to feed some place holder/default values in here
         """Initialize the class object."""
         self.num_of_labels = num_of_labels
         self.dim = dim
         self.batch_size = batch_size
-        self.labels = labels
         self.list_IDs = list_IDs
-        self.shuttle = shuffle
+        self.shuffle = shuffle
         self.on_epoch_end()
     
     def __len__(self):
@@ -30,31 +32,29 @@ class DataGenerator(keras.utils.Sequence):
         
         #Generate data
         
-        X,y = self.__data_generation(list_IDs_temp)
+        X,Y = self.__data_generation(list_IDs_temp)
         
-        return X,y 
+        return X,Y
         
     def on_epoch_end(self):
         """Updates indexes after each epoch."""
-        self.indexes = np.arrange(len(self_list_IDs))
+        self.indexes = np.arange(len(self.list_IDs))
         if self.shuffle == True:
             np.random.shuffle(self.indexes)
             
     def __data_generation(self, list_IDs_temp):
         """Generates chunks of data containing batch size samples."""
-        #Initialize X,y
-        X = np.empty((self.batch_size, *self.dim))
-        y = np.empty((self.batch_size), *self.num_of_labels, dtype=float) #check that pT, theta, phi are indeed floats not doubles
+        #Initialize X,Y
+        X = np.empty([self.batch_size, self.dim])
+        Y = np.empty([self.batch_size, self.num_of_labels]) #I think I do not need to define the dtype because I am doing the Y part the same way as the X part is done aka with np.load #checked that indeed pT, theta, phi are floats, good
         
         #Generate data
         for i, ID in enumerate(list_IDs_temp):
-            #Store the sample
-            X[i,] = np.load('data/' + ID + '.npy') #This assumes you are storing the data in some folder called data that is inside the folder in which you are running your training code (aka you have some folder with your training code, within that folder is your folder called data where you have put all your data)
-        
-            #Store labels #not sure about this part, asking John
-            y[i,] = self.labels[ID] #might have to update because I have three labels...I think this is a good guess though
-        
-        return X, y #Again, might need to tweak because I have three labels...
-        
+            #Store the features
+            X[i,] = np.load('toUse_data_features/features_example_' + ID + '.npy') 
+            #Store labels
+            Y[i,] = np.load('toUse_data_labels/labels_example_' + ID + '.npy')
+            
+        return X, Y 
     
     
