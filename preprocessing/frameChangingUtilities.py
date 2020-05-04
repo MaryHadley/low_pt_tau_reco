@@ -183,15 +183,101 @@ def unrotateFromVisTauMomPointsAlongZAxis(tau_orig_theta, tau_orig_phi, rot_four
     Global_4vec.SetPxPyPzE(tmp_unrotated_Px, tmp_unrotated_Py, tmp_unrotated_Pz, tmp_E)
     
     return Global_4vec
+    
+    
+#Finally, make sure the phi associated with the toUse_local four vector falls within [-pi/2, pi/2] by using arc tan. We will not need to undo this, because this is not a rotation, just making sure that we get things in the range we want
+#Discussion of why it is right to use if/elif/else here as opposed to multiple if statements: https://stackoverflow.com/questions/9271712/difference-between-multiple-ifs-and-elifs
+def get_toUse_local_phi(toUse_local_four_vector):
+    
+    tmp_Px = toUse_local_four_vector.Px()
+    tmp_Py = toUse_local_four_vector.Py()
+    
+    if tmp_Px != 0.:
+        toUse_local_phi = np.arctan(tmp_Py/tmp_Px)
+#        print "I fired"
+    elif tmp_Py == 0.:
+#        print "dog"
+        toUse_local_phi = 0.
+    elif tmp_Py > 0.:
+        toUse_local_phi = 0.5 * np.pi
+    else:
+        toUse_local_phi = -0.5 * np.pi
+        
+    return toUse_local_phi
 
 
 
+def naiveTauScaling(toUse_local_vis_tau_four_vector):
+    nomTauMass = 1.78
+    Mvis = toUse_local_vis_tau_four_vector.M()
+    Evis = toUse_local_vis_tau_four_vector.E()
+    Px = toUse_local_vis_tau_four_vector.Px()
+    Py = toUse_local_vis_tau_four_vector.Py()
+    Pvis = toUse_local_vis_tau_four_vector.Pz() #Recall that we have defined things so that all Pvis points along Z, i.e: that x,y components are 0
+    
+    numerator = ((nomTauMass)**2) - ((Mvis)**2)
+    denominator = 2*((Evis)-(Pvis))  #denominator should never be 0 because the visible tau is a massive particle 
+    
+    Enu = numerator/denominator 
+#    Pnu = Enu #recall that E = P for neutrino (because neutrino is massless)
+    
+    naiveTau_lv = ROOT.TLorentzVector()
+    naiveTau_lv.SetPxPyPzE(Px,Py, Pvis + Enu, Evis + Enu)
+    
+    return naiveTau_lv
+    
+def labFrameNaiveTauScaling(vis_tau_four_vector):
+    nomTauMass = 1.78
+    Mvis = vis_tau_four_vector.M()
+    Evis = vis_tau_four_vector.E()
+    Px =  vis_tau_four_vector.Px()
+    Py =  vis_tau_four_vector.Py()
+    Pz = vis_tau_four_vector.Pz()
+    Pvis = ((Px**2) + (Py**2) + (Pz**2))**0.5
+    
+    numerator = ((nomTauMass)**2) - ((Mvis)**2)
+    denominator = 2*((Evis)-(Pvis))  #denominator should never be 0 because the visible tau is a massive particle 
+    
+    Enu = numerator/denominator 
+    
+    scaleFactor = (1 + (Enu/Pvis))
+    
+    
+    labFrame_naiveTau_lv = ROOT.TLorentzVector()
+    labFrame_naiveTau_lv.SetPxPyPzE(scaleFactor*Px, scaleFactor*Py, scaleFactor*Pz, Evis + Enu)
+    
+    return labFrame_naiveTau_lv
+    
+
+def getMag(four_vec):
+    a = four_vec.Px()
+    b = four_vec.Py()
+    c = four_vec.Pz()
+    MagSq = a**2 + b**2 + c**2
+    Mag = MagSq**0.5
+    return Mag
     
 ##### test #####
+#v = TLorentzVector()
+#v.SetPxPyPzE(-0.342726027274,4.29510947093, 4.16558313255,5.99312183517)
+#vnew = rotateToVisTauMomPointsAlongZAxis(1.06751861495, 1.7869040797, v)
+#print vnew.Px(), vnew.Py(), vnew.Pz(), vnew.E()
+#print getMag(v)
+#print 3**0.5
 
+
+#v = TLorentzVector()
+#v.SetPxPyPzE(1,0,0,1)
+#print v.Theta()
+#print v.Phi()
+#vnew = rotateToVisTauMomPointsAlongZAxis(np.pi, 0,v)
+#print vnew.Theta(), vnew.Phi()
+#print vnew.Px(), vnew.Py(), vnew.Pz()
 # v = TLorentzVector()
-# v.SetPxPyPzE(-3.6740152498,-2.79192430698,  21.6557548444, 22.1777103583)
-# #v.SetPxPyPzE(0,0,1,1)
+# # v.SetPxPyPzE(-3.6740152498,-2.79192430698,  21.6557548444, 22.1777103583)
+# v.SetPxPyPzE(1,0,0,3)
+# print get_toUse_local_phi(v)
+#  
 # print "Px,Py,Pz,E,M:", v.Px(), v.Py(), v.Pz(), v.E(), v.M()
 # print '%.15f' %v.Px()
 # print "tau_orig_theta, tau_orig_phi:", v.Theta(), v.Phi()
