@@ -360,11 +360,15 @@ branches.append("toUse_local_pi_m_lv1_pt")
 branches.append("toUse_local_pi_m_lv2_pt")
 branches.append("toUse_local_pi_m_lv3_pt")
 branches.append("toUse_local_neu_lv_pt")
+#new label
+branches.append("toUse_local_neu_lv_pt_norm_by_tauMass")
 
 branches.append("toUse_local_pi_p_lv1_pt")
 branches.append("toUse_local_pi_p_lv2_pt")
 branches.append("toUse_local_pi_p_lv3_pt")
 branches.append("toUse_local_antineu_lv_pt")
+#new label
+branches.append("toUse_local_antineu_lv_pt_norm_by_tauMass")
 
 #toUse theta info
 
@@ -435,7 +439,247 @@ branches.append('candMatchPi2Info_tau_pdgID_minus_deltaPt')
 branches.append('taum_charge') #should be -1, charge of the tau
 branches.append('taup_charge') # should be +1, charge of antitau 
 
+#all 3 pi associated with either the tau plus or the tau minus in lab frame sorted from highest to lowest pt
+branches.append('sorted_in_pt_pi_lv1_pt_p')
+branches.append('sorted_in_pt_pi_lv2_pt_p')
+branches.append('sorted_in_pt_pi_lv3_pt_p')
+branches.append('sorted_in_pt_pi_lv1_pt_m')
+branches.append('sorted_in_pt_pi_lv2_pt_m')
+branches.append('sorted_in_pt_pi_lv3_pt_m')
+
+branches.append('sorted_in_pt_pi_lv1_pt_norm_by_tauMass_p')
+branches.append('sorted_in_pt_pi_lv2_pt_norm_by_tauMass_p')
+branches.append('sorted_in_pt_pi_lv3_pt_norm_by_tauMass_p')
+branches.append('sorted_in_pt_pi_lv1_pt_norm_by_tauMass_m')
+branches.append('sorted_in_pt_pi_lv2_pt_norm_by_tauMass_m')
+branches.append('sorted_in_pt_pi_lv3_pt_norm_by_tauMass_m')
+
+branches.append('sorted_in_pt_pi_lv1_eta_p')
+branches.append('sorted_in_pt_pi_lv2_eta_p')
+branches.append('sorted_in_pt_pi_lv3_eta_p')
+branches.append('sorted_in_pt_pi_lv1_eta_m')
+branches.append('sorted_in_pt_pi_lv2_eta_m')
+branches.append('sorted_in_pt_pi_lv3_eta_m')
+
+
+branches.append('sorted_in_pt_pi_lv1_theta_p')
+branches.append('sorted_in_pt_pi_lv2_theta_p')
+branches.append('sorted_in_pt_pi_lv3_theta_p')
+branches.append('sorted_in_pt_pi_lv1_theta_m')
+branches.append('sorted_in_pt_pi_lv2_theta_m')
+branches.append('sorted_in_pt_pi_lv3_theta_m')
+
+branches.append('sorted_in_pt_pi_lv1_phi_p')
+branches.append('sorted_in_pt_pi_lv2_phi_p')
+branches.append('sorted_in_pt_pi_lv3_phi_p')
+branches.append('sorted_in_pt_pi_lv1_phi_m')
+branches.append('sorted_in_pt_pi_lv2_phi_m')
+branches.append('sorted_in_pt_pi_lv3_phi_m')
+
+#Stuff to try with interaction net
+branches.append("sorted_in_pt_pi_lv1_px_p")
+branches.append("sorted_in_pt_pi_lv1_py_p")
+branches.append("sorted_in_pt_pi_lv1_pz_p")
+branches.append("sorted_in_pt_pi_lv1_E_p")
+branches.append("sorted_in_pt_pi_lv1_mass_p")
+
+branches.append("sorted_in_pt_pi_lv2_px_p")
+branches.append("sorted_in_pt_pi_lv2_py_p")
+branches.append("sorted_in_pt_pi_lv2_pz_p")
+branches.append("sorted_in_pt_pi_lv2_E_p")
+branches.append("sorted_in_pt_pi_lv2_mass_p")
+
+branches.append("sorted_in_pt_pi_lv3_px_p")
+branches.append("sorted_in_pt_pi_lv3_py_p")
+branches.append("sorted_in_pt_pi_lv3_pz_p")
+branches.append("sorted_in_pt_pi_lv3_E_p")
+branches.append("sorted_in_pt_pi_lv3_mass_p")
+
+branches.append("sorted_in_pt_pi_lv1_px_m")
+branches.append("sorted_in_pt_pi_lv1_py_m")
+branches.append("sorted_in_pt_pi_lv1_pz_m")
+branches.append("sorted_in_pt_pi_lv1_E_m")
+branches.append("sorted_in_pt_pi_lv1_mass_m")
+
+branches.append("sorted_in_pt_pi_lv2_px_m")
+branches.append("sorted_in_pt_pi_lv2_py_m")
+branches.append("sorted_in_pt_pi_lv2_pz_m")
+branches.append("sorted_in_pt_pi_lv2_E_m")
+branches.append("sorted_in_pt_pi_lv2_mass_m")
+
+branches.append("sorted_in_pt_pi_lv3_px_m")
+branches.append("sorted_in_pt_pi_lv3_py_m")
+branches.append("sorted_in_pt_pi_lv3_pz_m")
+branches.append("sorted_in_pt_pi_lv3_E_m")
+branches.append("sorted_in_pt_pi_lv3_mass_m")
+
+
+
+
+
+#just normalized, but no sorting in lab frame
+branches.append('pi_pt_lv1_norm_by_tauMass_p')
+branches.append('pi_pt_lv2_norm_by_tauMass_p')
+branches.append('pi_pt_lv3_norm_by_tauMass_p')
+branches.append('pi_pt_lv1_norm_by_tauMass_m')
+branches.append('pi_pt_lv2_norm_by_tauMass_m')
+branches.append('pi_pt_lv3_norm_by_tauMass_m')
+
 #branches.append('len_neuPiList_tau_pdgID_plus')
+
+#local taup and taum stuff #Recall that taup and taum in local frame already got sorted in pT in that frame, with lv1 being the highest in pT
+
+#oUse_local_pi_p_lv stuff 
+branches.append("toUse_local_pi_p_lv1_px")
+branches.append("toUse_local_pi_p_lv1_py")
+branches.append("toUse_local_pi_p_lv1_pz")
+branches.append("toUse_local_pi_p_lv1_E")
+branches.append("toUse_local_pi_p_lv1_mass")
+
+branches.append("toUse_local_pi_p_lv2_px")
+branches.append("toUse_local_pi_p_lv2_py")
+branches.append("toUse_local_pi_p_lv2_pz")
+branches.append("toUse_local_pi_p_lv2_E")
+branches.append("toUse_local_pi_p_lv2_mass")
+
+branches.append("toUse_local_pi_p_lv3_px")
+branches.append("toUse_local_pi_p_lv3_py")
+branches.append("toUse_local_pi_p_lv3_pz")
+branches.append("toUse_local_pi_p_lv3_E")
+branches.append("toUse_local_pi_p_lv3_mass")
+
+#toUse_local_pi_m_lv stuff
+#Ok this stuff all works if I want to fill in a loop, but I think I don't want to change the syntax of having lowercase px, py, pz, so I am not going to do it this way
+# branches.append("toUse_local_pi_m_lv1_Px")
+# branches.append("toUse_local_pi_m_lv1_Py")
+# branches.append("toUse_local_pi_m_lv1_Pz")
+# branches.append("toUse_local_pi_m_lv1_E")
+# branches.append("toUse_local_pi_m_lv1_mass")
+# 
+# branches.append("toUse_local_pi_m_lv2_Px")
+# branches.append("toUse_local_pi_m_lv2_Py")
+# branches.append("toUse_local_pi_m_lv2_Pz")
+# branches.append("toUse_local_pi_m_lv2_E")
+# branches.append("toUse_local_pi_m_lv2_mass")
+# 
+# branches.append("toUse_local_pi_m_lv3_Px")
+# branches.append("toUse_local_pi_m_lv3_Py")
+# branches.append("toUse_local_pi_m_lv3_Pz")
+# branches.append("toUse_local_pi_m_lv3_E")
+# branches.append("toUse_local_pi_m_lv3_mass")
+
+#Ok, this keeps the px, py, pz uniformly lowercase, which I might want later down the line, and using lower(), I can keep the px, py, pz naming and still use a loop. However because of wanting to avoid locals()  I eventually decided that using the loop was more effort than it was worth and I just filled the old boring naive way. 
+branches.append("toUse_local_pi_m_lv1_px")
+branches.append("toUse_local_pi_m_lv1_py")
+branches.append("toUse_local_pi_m_lv1_pz")
+branches.append("toUse_local_pi_m_lv1_E")
+branches.append("toUse_local_pi_m_lv1_mass")
+
+branches.append("toUse_local_pi_m_lv2_px")
+branches.append("toUse_local_pi_m_lv2_py")
+branches.append("toUse_local_pi_m_lv2_pz")
+branches.append("toUse_local_pi_m_lv2_E")
+branches.append("toUse_local_pi_m_lv2_mass")
+
+branches.append("toUse_local_pi_m_lv3_px")
+branches.append("toUse_local_pi_m_lv3_py")
+branches.append("toUse_local_pi_m_lv3_pz")
+branches.append("toUse_local_pi_m_lv3_E")
+branches.append("toUse_local_pi_m_lv3_mass")
+
+#In global frame 
+
+#pdgID
+branches.append("pi_plus_sorted_in_pt_1_pdgID")
+branches.append("pi_plus_sorted_in_pt_2_pdgID")
+branches.append("pi_plus_sorted_in_pt_3_pdgID")
+branches.append("pi_minus_sorted_in_pt_1_pdgID")
+branches.append("pi_minus_sorted_in_pt_2_pdgID")
+branches.append("pi_minus_sorted_in_pt_3_pdgID")
+
+#charge
+branches.append("pi_plus_sorted_in_pt_1_charge")
+branches.append("pi_plus_sorted_in_pt_2_charge")
+branches.append("pi_plus_sorted_in_pt_3_charge")
+branches.append("pi_minus_sorted_in_pt_1_charge")
+branches.append("pi_minus_sorted_in_pt_2_charge")
+branches.append("pi_minus_sorted_in_pt_3_charge")
+
+#HCAL Fraction
+branches.append("pi_plus_sorted_in_pt_1_hcalFraction")
+branches.append("pi_plus_sorted_in_pt_2_hcalFraction")
+branches.append("pi_plus_sorted_in_pt_3_hcalFraction")
+branches.append("pi_minus_sorted_in_pt_1_hcalFraction")
+branches.append("pi_minus_sorted_in_pt_2_hcalFraction")
+branches.append("pi_minus_sorted_in_pt_3_hcalFraction")
+
+#Phi at vertex
+branches.append("pi_plus_sorted_in_pt_1_phiAtVtx")
+branches.append("pi_plus_sorted_in_pt_2_phiAtVtx")
+branches.append("pi_plus_sorted_in_pt_3_phiAtVtx")
+branches.append("pi_minus_sorted_in_pt_1_phiAtVtx")
+branches.append("pi_minus_sorted_in_pt_2_phiAtVtx")
+branches.append("pi_minus_sorted_in_pt_3_phiAtVtx")
+
+#diff between phiAtVtx and phi
+branches.append("pi_plus_sorted_in_pt_1_phiAtVtxMinusPhi")
+branches.append("pi_plus_sorted_in_pt_2_phiAtVtxMinusPhi")
+branches.append("pi_plus_sorted_in_pt_3_phiAtVtxMinusPhi")
+branches.append("pi_minus_sorted_in_pt_1_phiAtVtxMinusPhi")
+branches.append("pi_minus_sorted_in_pt_2_phiAtVtxMinusPhi")
+branches.append("pi_minus_sorted_in_pt_3_phiAtVtxMinusPhi")
+
+#Not useful for particle gun I don't think 
+# vertexRef
+# branches.append("pi_plus_sorted_in_pt_1_vertexRef")
+# branches.append("pi_plus_sorted_in_pt_2_vertexRef")
+# branches.append("pi_plus_sorted_in_pt_3_vertexRef")
+# branches.append("pi_minus_sorted_in_pt_1_vertexRef")
+# branches.append("pi_minus_sorted_in_pt_2_vertexRef")
+# branches.append("pi_minus_sorted_in_pt_3_vertexRef")
+
+
+#In local frame
+
+#pdgId
+branches.append("pi_plus_sorted_in_local_pt_1_pdgID")
+branches.append("pi_plus_sorted_in_local_pt_2_pdgID")
+branches.append("pi_plus_sorted_in_local_pt_3_pdgID")
+branches.append("pi_minus_sorted_in_local_pt_1_pdgID")
+branches.append("pi_minus_sorted_in_local_pt_2_pdgID")
+branches.append("pi_minus_sorted_in_local_pt_3_pdgID")
+
+#charge
+branches.append("pi_plus_sorted_in_local_pt_1_charge")
+branches.append("pi_plus_sorted_in_local_pt_2_charge")
+branches.append("pi_plus_sorted_in_local_pt_3_charge")
+branches.append("pi_minus_sorted_in_local_pt_1_charge")
+branches.append("pi_minus_sorted_in_local_pt_2_charge")
+branches.append("pi_minus_sorted_in_local_pt_3_charge")
+
+#HCAL Fraction
+branches.append("pi_plus_sorted_in_local_pt_1_hcalFraction")
+branches.append("pi_plus_sorted_in_local_pt_2_hcalFraction")
+branches.append("pi_plus_sorted_in_local_pt_3_hcalFraction")
+branches.append("pi_minus_sorted_in_local_pt_1_hcalFraction")
+branches.append("pi_minus_sorted_in_local_pt_2_hcalFraction")
+branches.append("pi_minus_sorted_in_local_pt_3_hcalFraction")
+
+branches.append("pi_plus_sorted_in_local_pt_1_phiAtVtx")
+branches.append("pi_plus_sorted_in_local_pt_2_phiAtVtx")
+branches.append("pi_plus_sorted_in_local_pt_3_phiAtVtx")
+branches.append("pi_minus_sorted_in_local_pt_1_phiAtVtx")
+branches.append("pi_minus_sorted_in_local_pt_2_phiAtVtx")
+branches.append("pi_minus_sorted_in_local_pt_3_phiAtVtx")
+
+#diff between phiAtVtx and phi
+branches.append("pi_plus_sorted_in_local_pt_1_phiAtVtxMinusPhi")
+branches.append("pi_plus_sorted_in_local_pt_2_phiAtVtxMinusPhi")
+branches.append("pi_plus_sorted_in_local_pt_3_phiAtVtxMinusPhi")
+branches.append("pi_minus_sorted_in_local_pt_1_phiAtVtxMinusPhi")
+branches.append("pi_minus_sorted_in_local_pt_2_phiAtVtxMinusPhi")
+branches.append("pi_minus_sorted_in_local_pt_3_phiAtVtxMinusPhi")
+
 
 
 ### End of long list of branches
@@ -515,8 +759,9 @@ piPtCut = 0
 etaCut = 2.5
 
 #Mass constants (in GeV)
-piMass = 0.139 
+piMass = 0.13957 
 nuMass = 0
+tauMass = 1.777
 
 #Distance Metric Cuts
 
@@ -531,6 +776,7 @@ else:
 
 # use Varparsing object
 events = Events (options)
+print "events are:", events
 
 #Counters
 nTot = 0
@@ -832,6 +1078,52 @@ for event in events:
             pi_plus1 = rec_pi1s['-'][int(candMatchPi1Info_tau_pdgID_minus_index)]
             pi_plus2 = rec_pi2s['-'][int(candMatchPi2Info_tau_pdgID_minus_index_list[0])]
             pi_plus3 = rec_pi2s['-'][int(candMatchPi2Info_tau_pdgID_minus_index_list[1])]
+            
+            #variables for sorting the pi_plus objects, being very careful and making a different variable because I am tired
+            pi_plus1_unsorted = rec_pi1s['-'][int(candMatchPi1Info_tau_pdgID_minus_index)]
+            pi_plus2_unsorted = rec_pi2s['-'][int(candMatchPi2Info_tau_pdgID_minus_index_list[0])]
+            pi_plus3_unsorted = rec_pi2s['-'][int(candMatchPi2Info_tau_pdgID_minus_index_list[1])]
+            
+            pi_plus_unsorted_list = [pi_plus1_unsorted, pi_plus2_unsorted, pi_plus3_unsorted]
+            pi_plus_unsorted_list_pt = [pi_plus1_unsorted.pt(), pi_plus2_unsorted.pt(), pi_plus3_unsorted.pt()]
+            print "24 July 2020 Addition"
+            for i in pi_plus_unsorted_list_pt: print i
+            print "#####"
+            
+            sorted_pi_plus_originalIndexList_pt =  [i[0] for i in sorted(enumerate(pi_plus_unsorted_list_pt), reverse=True, key=lambda x:x[1])]
+            
+            for myIndex in sorted_pi_plus_originalIndexList_pt: print myIndex 
+            
+            pi_plus_sorted_in_pt_1 = pi_plus_unsorted_list[sorted_pi_plus_originalIndexList_pt[0]]
+            pi_plus_sorted_in_pt_2 = pi_plus_unsorted_list[sorted_pi_plus_originalIndexList_pt[1]]
+            pi_plus_sorted_in_pt_3 = pi_plus_unsorted_list[sorted_pi_plus_originalIndexList_pt[2]]
+            
+            print "pi_plus_sorted_in_pt_1.pt():", pi_plus_sorted_in_pt_1.pt()
+            print "pi_plus_sorted_in_pt_2.pt():", pi_plus_sorted_in_pt_2.pt()
+            print "pi_plus_sorted_in_pt_3.pt():", pi_plus_sorted_in_pt_3.pt()
+            
+            print "pi_plus1.pt():", pi_plus1.pt()
+            print "pi_plus2.pt():", pi_plus2.pt()
+            print "pi_plus3.pt():", pi_plus3.pt()
+            
+            
+          #   print "pi_plus1.p4() is:", pi_plus1.p4()
+#             print("pi_plus1.p4().px():", pi_plus1.p4().px() )
+#             print("pi_plus2.p4().px():", pi_plus2.p4().px() )
+#             print("pi_plus3.p4().px():", pi_plus3.p4().px() )
+#             
+#             print("pi_plus1.p4().py():", pi_plus1.p4().py() )
+#             print("pi_plus2.p4().py():", pi_plus2.p4().py() )
+#             print("pi_plus3.p4().py():", pi_plus3.p4().py() )
+#             
+#             print("pi_plus1.p4().pz():", pi_plus1.p4().pz() )
+#             print("pi_plus2.p4().pz():", pi_plus2.p4().pz() )
+#             print("pi_plus3.p4().pz():", pi_plus3.p4().pz() )
+#             
+#             print("pi_plus1.p4().energy():", pi_plus1.p4().energy() )
+#             print("pi_plus2.p4().energy():", pi_plus2.p4().energy() )
+#             print("pi_plus3.p4().energy():", pi_plus3.p4().energy() )
+            
              #print "nuList_tau_pdgID_minus is:", nuList_tau_pdgID_minus
             antineu = nuList_tau_pdgID_minus[0]
             # print "pi_plus1.pdgId() is:", pi_plus1.pdgId()
@@ -851,6 +1143,22 @@ for event in events:
             antineu_lv.SetPtEtaPhiM(antineu.pt(), antineu.eta(), antineu.phi(), nuMass)
             taup_lv = pi_p_lv1 + pi_p_lv2 + pi_p_lv3 + antineu_lv
             
+            print "pi_p_lv1.Px():", pi_p_lv1.Px()
+            print "pi_p_lv2.Px()", pi_p_lv2.Px()
+            print "pi_p_lv3.Px()", pi_p_lv3.Px()
+            
+            print "pi_p_lv1.Py():", pi_p_lv1.Py()
+            print "pi_p_lv2.Py()", pi_p_lv2.Py()
+            print "pi_p_lv3.Py()", pi_p_lv3.Py()
+            
+            print "pi_p_lv1.Pz():", pi_p_lv1.Pz()
+            print "pi_p_lv2.Pz()", pi_p_lv2.Pz()
+            print "pi_p_lv3.Pz()", pi_p_lv3.Pz()
+            
+            print "pi_p_lv1.E():", pi_p_lv1.E()
+            print "pi_p_lv2.E()", pi_p_lv2.E()
+            print "pi_p_lv3.E()", pi_p_lv3.E()
+            
             #Do rotation to local frame for taup
             vis_taup_lv = pi_p_lv1 + pi_p_lv2 + pi_p_lv3
             orig_vis_taup_theta = vis_taup_lv.Theta()
@@ -864,15 +1172,15 @@ for event in events:
             
             local_unsortedPiPtList_p = [local_pi_p_lv1.Pt(), local_pi_p_lv2.Pt(), local_pi_p_lv3.Pt()]
             local_unsortedPi4VecList_p = [local_pi_p_lv1, local_pi_p_lv2, local_pi_p_lv3]
-            #print "local_unsortedPiPtList_p is:", local_unsortedPiPtList_p
+            print "local_unsortedPiPtList_p is:", local_unsortedPiPtList_p
             
              # idea of how to do this from: https://stackoverflow.com/questions/6422700/how-to-get-indices-of-a-sorted-array-in-python
             local_sortedPiPtOriginalIndexList_p =      [i[0] for i in sorted(enumerate(local_unsortedPiPtList_p), reverse=True, key=lambda x:x[1])]
             #print "local_sortedPiPtOriginalIndexList_p:", local_sortedPiPtOriginalIndexList_p
-        
-           # print local_sortedPiPtOriginalIndexList_p[0] #index of the element of the vector with the biggest pT
-            #print local_sortedPiPtOriginalIndexList_p[1] #index of the element of the vector with the second biggest pT
-            #print local_sortedPiPtOriginalIndexList_p[2] #index of the element of the vector with the smallest pT
+            print "local stuff for sanity checking 28 July 2020"
+            print local_sortedPiPtOriginalIndexList_p[0] #index of the element of the vector with the biggest pT
+            print local_sortedPiPtOriginalIndexList_p[1] #index of the element of the vector with the second biggest pT
+            print local_sortedPiPtOriginalIndexList_p[2] #index of the element of the vector with the smallest pT
         
             local_pi_p_lv1 = local_unsortedPi4VecList_p[local_sortedPiPtOriginalIndexList_p[0]] #make the pi_m_lv1 the vector that has the biggest pT in the new frame
             local_pi_p_lv2 = local_unsortedPi4VecList_p[local_sortedPiPtOriginalIndexList_p[1]] #make the pi_m_lv2 the vector that has the second biggest pT in the new frame
@@ -881,6 +1189,28 @@ for event in events:
           #   print "new local_pi_p_lv1.Pt() is:", local_pi_p_lv1.Pt()
 #             print "new local_pi_p_lv2.Pt() is:", local_pi_p_lv2.Pt()
 #             print "new local_pi_p_lv3.Pt() is:", local_pi_p_lv3.Pt()
+        
+            #pi_plus_unsorted_list has the pis in the original indices 0,1,2 
+            #these we transformed the four vectors from lab to local, keeping the indices the same, in the sense that the pi object associated with local lortenz vector 1 was still the 0th indexed object
+            pi_plus_sorted_in_local_pt_1 = pi_plus_unsorted_list[local_sortedPiPtOriginalIndexList_p[0]]
+            pi_plus_sorted_in_local_pt_2 = pi_plus_unsorted_list[local_sortedPiPtOriginalIndexList_p[1]]
+            pi_plus_sorted_in_local_pt_3 = pi_plus_unsorted_list[local_sortedPiPtOriginalIndexList_p[2]]
+            
+            #express check for event 4993 of my test file (aka i know what to expect for this test file)
+            print "pi_plus_sorted_in_local_pt_1.charge():", pi_plus_sorted_in_local_pt_1.charge()
+            print "pi_plus1_unsorted.charge():", pi_plus1_unsorted.charge()
+            
+            print "pi_plus_sorted_in_local_pt_2.charge():", pi_plus_sorted_in_local_pt_2.charge()
+            print "pi_plus2_unsorted.charge():", pi_plus2_unsorted.charge()
+            
+            print "pi_plus_sorted_in_local_pt_3.charge():", pi_plus_sorted_in_local_pt_3.charge()
+            print "pi_plus3_unsorted.charge():", pi_plus3_unsorted.charge()
+            
+            if pi_plus_sorted_in_local_pt_1.hcalFraction() != 0 and local_sortedPiPtOriginalIndexList_p[0] ==0:
+                 print "PISHEE"
+                 print pi_plus_sorted_in_local_pt_1.hcalFraction()
+                 print pi_plus1_unsorted.hcalFraction()
+            
         
             local_pi_p_lv1_pt = local_pi_p_lv1.Pt()
             local_pi_p_lv2_pt = local_pi_p_lv2.Pt()
@@ -910,6 +1240,7 @@ for event in events:
             toUse_local_pi_p_lv2_pt = toUse_local_pi_p_lv2.Pt()
             toUse_local_pi_p_lv3_pt = toUse_local_pi_p_lv3.Pt()
             toUse_local_antineu_lv_pt = toUse_local_antineu_lv.Pt()
+            toUse_local_antineu_lv_pt_norm_by_tauMass = toUse_local_antineu_lv_pt/tauMass
         
             toUse_local_pi_p_lv1_theta = toUse_local_pi_p_lv1.Theta()
             toUse_local_pi_p_lv2_theta = toUse_local_pi_p_lv2.Theta()
@@ -933,6 +1264,8 @@ for event in events:
             check3_mass = check3.M()
             check4 = unrotateFromVisTauMomPointsAlongZAxis(orig_vis_taup_theta,orig_vis_taup_phi, check3)
             check4_mass = check4.M()
+            
+           
 
             
         
@@ -947,6 +1280,32 @@ for event in events:
 #             print "pi_minus2.pdgId() is:", pi_minus2.pdgId()
 #             print "pi_minus3.pdgId() is:", pi_minus3.pdgId()
 #             print "nu.pdgId() is:", nu.pdgId()
+
+            #variables for sorting the pi_plus objects, being very careful and making a different variable because I am tired
+            pi_minus1_unsorted = rec_pi1s['+'][int(candMatchPi1Info_tau_pdgID_plus_index)]
+            pi_minus2_unsorted = rec_pi2s['+'][int(candMatchPi2Info_tau_pdgID_plus_index_list[0])]
+            pi_minus3_unsorted = rec_pi2s['+'][int(candMatchPi2Info_tau_pdgID_plus_index_list[1])]
+            
+            pi_minus_unsorted_list = [pi_minus1_unsorted, pi_minus2_unsorted, pi_minus3_unsorted]
+            pi_minus_unsorted_list_pt = [pi_minus1_unsorted.pt(), pi_minus2_unsorted.pt(), pi_minus3_unsorted.pt()]
+            print "24 July 2020 Addition"
+            for i in pi_minus_unsorted_list_pt: print i
+            print "#####"
+            
+            sorted_pi_minus_originalIndexList_pt =  [i[0] for i in sorted(enumerate(pi_minus_unsorted_list_pt), reverse=True, key=lambda x:x[1])]
+            for myIndex in sorted_pi_minus_originalIndexList_pt: print myIndex 
+            
+            pi_minus_sorted_in_pt_1 = pi_minus_unsorted_list[sorted_pi_minus_originalIndexList_pt[0]]
+            pi_minus_sorted_in_pt_2 = pi_minus_unsorted_list[sorted_pi_minus_originalIndexList_pt[1]]
+            pi_minus_sorted_in_pt_3 = pi_minus_unsorted_list[sorted_pi_minus_originalIndexList_pt[2]]
+            
+            print "pi_minus_sorted_in_pt_1.pt():", pi_minus_sorted_in_pt_1.pt()
+            print "pi_minus_sorted_in_pt_2.pt():", pi_minus_sorted_in_pt_2.pt()
+            print "pi_minus_sorted_in_pt_3.pt():", pi_minus_sorted_in_pt_3.pt()
+            
+            print "pi_minus1.pt():", pi_minus1.pt()
+            print "pi_minus2.pt():", pi_minus2.pt()
+            print "pi_minus3.pt():", pi_minus3.pt()
             
             taum_charge = np.sign(pi_minus1.pdgId() + pi_minus2.pdgId() + pi_minus3.pdgId())
             
@@ -990,7 +1349,17 @@ for event in events:
             local_pi_m_lv2 = local_unsortedPi4VecList_m[local_sortedPiPtOriginalIndexList_m[1]] #make the pi_m_lv2 the vector that has the second biggest pT in the new frame
             local_pi_m_lv3 = local_unsortedPi4VecList_m[local_sortedPiPtOriginalIndexList_m[2]] #make the pi_m_lv3 the vector that has the smallest pT in the new frame 
             
+            #pi_minus_unsorted_list has the pis in the original indices 0,1,2 
+            #these we transformed the four vectors from lab to local, keeping the indices the same, in the sense that the pi object associated with local lortenz vector 1 was still the 0th indexed object
             
+            pi_minus_sorted_in_local_pt_1 = pi_minus_unsorted_list[local_sortedPiPtOriginalIndexList_m[0]]
+            pi_minus_sorted_in_local_pt_2 = pi_minus_unsorted_list[local_sortedPiPtOriginalIndexList_m[1]]
+            pi_minus_sorted_in_local_pt_3 = pi_minus_unsorted_list[local_sortedPiPtOriginalIndexList_m[2]]
+            
+            if pi_minus_sorted_in_local_pt_1.hcalFraction() != 0 and local_sortedPiPtOriginalIndexList_m[0] ==0:
+                 print "PISHEE2"
+                 print pi_minus_sorted_in_local_pt_1.hcalFraction()
+                 print pi_minus1_unsorted.hcalFraction()
           #   print "new local_pi_m_lv1.Pt() is:", local_pi_m_lv1.Pt()
 #             print "new local_pi_m_lv2.Pt() is:", local_pi_m_lv2.Pt()
 #             print "new local_pi_m_lv3.Pt() is:", local_pi_m_lv3.Pt()
@@ -1024,6 +1393,7 @@ for event in events:
             toUse_local_pi_m_lv2_pt =  toUse_local_pi_m_lv2.Pt()
             toUse_local_pi_m_lv3_pt =  toUse_local_pi_m_lv3.Pt()
             toUse_local_neu_lv_pt =    toUse_local_neu_lv.Pt()
+            toUse_local_neu_lv_pt_norm_by_tauMass = toUse_local_neu_lv_pt/tauMass
             
             toUse_local_pi_m_lv1_theta = toUse_local_pi_m_lv1.Theta()
             toUse_local_pi_m_lv2_theta = toUse_local_pi_m_lv2.Theta()
@@ -1105,6 +1475,16 @@ for event in events:
             tofill['pi_plus3_phi'] = pi_p_lv3.Phi()
             tofill['pi_plus3_theta'] = pi_p_lv3.Theta()
             
+            
+            #Lab frame, just normalized, no sorting 
+            tofill['pi_pt_lv1_norm_by_tauMass_p'] = (pi_p_lv1.Pt()) * (1/tauMass)
+            tofill['pi_pt_lv2_norm_by_tauMass_p'] = (pi_p_lv2.Pt()) * (1/tauMass)
+            tofill['pi_pt_lv3_norm_by_tauMass_p'] = (pi_p_lv3.Pt()) * (1/tauMass)
+            tofill['pi_pt_lv1_norm_by_tauMass_m'] = (pi_m_lv1.Pt()) * (1/tauMass)
+            tofill['pi_pt_lv2_norm_by_tauMass_m'] = (pi_m_lv2.Pt()) * (1/tauMass)
+            tofill['pi_pt_lv3_norm_by_tauMass_m'] = (pi_m_lv3.Pt()) * (1/tauMass)
+            
+            
             tofill['neutrino_pt'] = neu_lv.Pt()
             tofill['neutrino_phi'] = neu_lv.Phi()
             tofill['neutrino_eta'] = neu_lv.Eta()
@@ -1168,6 +1548,11 @@ for event in events:
             tofill["toUse_local_pi_m_lv3_phi"] = toUse_local_pi_m_lv3_phi
             tofill["toUse_local_neu_lv_phi"] = toUse_local_neu_lv_phi
             
+            #New labels
+            
+            tofill["toUse_local_neu_lv_pt_norm_by_tauMass"] = toUse_local_neu_lv_pt_norm_by_tauMass
+            tofill["toUse_local_antineu_lv_pt_norm_by_tauMass"] = toUse_local_antineu_lv_pt_norm_by_tauMass
+            
              
              #Sanity check
             tofill['local_taup_lv_mass'] = local_taup_lv_mass
@@ -1179,6 +1564,281 @@ for event in events:
             tofill['check4_mass'] = check4_mass
              
              
+             #some pT ordered global variable stuff
+            unsorted_PiPtList_p = [pi_p_lv1.Pt(), pi_p_lv2.Pt(), pi_p_lv3.Pt()]
+            print "11 July Addition Check"
+            for myPt_p in unsorted_PiPtList_p: print myPt_p
+            unsorted_PiPt4VecList_p = [pi_p_lv1, pi_p_lv2, pi_p_lv3]
+             
+            sorted_PiPtOriginalIndexList_p =  [i[0] for i in sorted(enumerate(unsorted_PiPtList_p), reverse=True, key=lambda x:x[1])]
+            for myIndex in sorted_PiPtOriginalIndexList_p: print myIndex
+            
+            sorted_in_pt_pi_lv1_p = unsorted_PiPt4VecList_p[sorted_PiPtOriginalIndexList_p[0]]
+            sorted_in_pt_pi_lv2_p = unsorted_PiPt4VecList_p[sorted_PiPtOriginalIndexList_p[1]]
+            sorted_in_pt_pi_lv3_p = unsorted_PiPt4VecList_p[sorted_PiPtOriginalIndexList_p[2]]
+            
+            
+            unsorted_PiPtList_m = [pi_m_lv1.Pt(), pi_m_lv2.Pt(), pi_m_lv3.Pt()]
+            print "11 July Addition Check"
+            for myPt_m in unsorted_PiPtList_p: print myPt_m
+            unsorted_PiPt4VecList_m = [pi_m_lv1, pi_m_lv2, pi_m_lv3]
+             
+            sorted_PiPtOriginalIndexList_m =  [i[0] for i in sorted(enumerate(unsorted_PiPtList_m), reverse=True, key=lambda x:x[1])]
+            for myIndex in sorted_PiPtOriginalIndexList_m: print myIndex
+            
+            sorted_in_pt_pi_lv1_m = unsorted_PiPt4VecList_m[sorted_PiPtOriginalIndexList_m[0]]
+            sorted_in_pt_pi_lv2_m = unsorted_PiPt4VecList_m[sorted_PiPtOriginalIndexList_m[1]]
+            sorted_in_pt_pi_lv3_m = unsorted_PiPt4VecList_m[sorted_PiPtOriginalIndexList_m[2]]
+            
+            
+            
+            # sorted_in_pt_all_pi_lv4 = unsorted_PiPt4VecList[sorted_PiPtOriginalIndexList[3]]
+#             sorted_in_pt_all_pi_lv5 = unsorted_PiPt4VecList[sorted_PiPtOriginalIndexList[4]]
+#             sorted_in_pt_all_pi_lv6 = unsorted_PiPt4VecList[sorted_PiPtOriginalIndexList[5]]
+   #          
+#             print sorted_in_pt_all_pi_lv1.Pt()
+#             print sorted_in_pt_all_pi_lv2.Pt()
+#             print sorted_in_pt_all_pi_lv3.Pt()
+#             print sorted_in_pt_all_pi_lv4.Pt()
+#             print sorted_in_pt_all_pi_lv5.Pt()
+#             print sorted_in_pt_all_pi_lv6.Pt()
+#             
+#             for myPt in unsorted_PiPtList: print myPt
+#             
+            tofill['sorted_in_pt_pi_lv1_pt_p'] = sorted_in_pt_pi_lv1_p.Pt()
+            tofill['sorted_in_pt_pi_lv2_pt_p'] = sorted_in_pt_pi_lv2_p.Pt()
+            tofill['sorted_in_pt_pi_lv3_pt_p'] = sorted_in_pt_pi_lv3_p.Pt()
+            tofill['sorted_in_pt_pi_lv1_pt_m'] = sorted_in_pt_pi_lv1_m.Pt()
+            tofill['sorted_in_pt_pi_lv2_pt_m'] = sorted_in_pt_pi_lv2_m.Pt()
+            tofill['sorted_in_pt_pi_lv3_pt_m'] = sorted_in_pt_pi_lv3_m.Pt()
+            
+            tofill['sorted_in_pt_pi_lv1_eta_p'] = sorted_in_pt_pi_lv1_p.Eta()
+            tofill['sorted_in_pt_pi_lv2_eta_p'] = sorted_in_pt_pi_lv2_p.Eta()
+            tofill['sorted_in_pt_pi_lv3_eta_p'] = sorted_in_pt_pi_lv3_p.Eta()
+            tofill['sorted_in_pt_pi_lv1_eta_m'] = sorted_in_pt_pi_lv1_m.Eta()
+            tofill['sorted_in_pt_pi_lv2_eta_m'] = sorted_in_pt_pi_lv2_m.Eta()
+            tofill['sorted_in_pt_pi_lv3_eta_m'] = sorted_in_pt_pi_lv3_m.Eta()
+            
+            tofill['sorted_in_pt_pi_lv1_theta_p'] = sorted_in_pt_pi_lv1_p.Theta()
+            tofill['sorted_in_pt_pi_lv2_theta_p'] = sorted_in_pt_pi_lv2_p.Theta()
+            tofill['sorted_in_pt_pi_lv3_theta_p'] = sorted_in_pt_pi_lv3_p.Theta()
+            tofill['sorted_in_pt_pi_lv1_theta_m'] = sorted_in_pt_pi_lv1_m.Theta()
+            tofill['sorted_in_pt_pi_lv2_theta_m'] = sorted_in_pt_pi_lv2_m.Theta()
+            tofill['sorted_in_pt_pi_lv3_theta_m'] = sorted_in_pt_pi_lv3_m.Theta()
+            
+            tofill['sorted_in_pt_pi_lv1_phi_p'] = sorted_in_pt_pi_lv1_p.Phi()
+            tofill['sorted_in_pt_pi_lv2_phi_p'] = sorted_in_pt_pi_lv2_p.Phi()
+            tofill['sorted_in_pt_pi_lv3_phi_p'] = sorted_in_pt_pi_lv3_p.Phi()
+            tofill['sorted_in_pt_pi_lv1_phi_m'] = sorted_in_pt_pi_lv1_m.Phi()
+            tofill['sorted_in_pt_pi_lv2_phi_m'] = sorted_in_pt_pi_lv2_m.Phi()
+            tofill['sorted_in_pt_pi_lv3_phi_m'] = sorted_in_pt_pi_lv3_m.Phi()
+            
+            tofill['sorted_in_pt_pi_lv1_pt_norm_by_tauMass_p'] = (sorted_in_pt_pi_lv1_p.Pt()) * (1/tauMass)
+            tofill['sorted_in_pt_pi_lv2_pt_norm_by_tauMass_p'] = (sorted_in_pt_pi_lv2_p.Pt()) * (1/tauMass)
+            tofill['sorted_in_pt_pi_lv3_pt_norm_by_tauMass_p'] = (sorted_in_pt_pi_lv3_p.Pt()) * (1/tauMass)
+            tofill['sorted_in_pt_pi_lv1_pt_norm_by_tauMass_m'] = (sorted_in_pt_pi_lv1_m.Pt()) * (1/tauMass)
+            tofill['sorted_in_pt_pi_lv2_pt_norm_by_tauMass_m'] = (sorted_in_pt_pi_lv2_m.Pt()) * (1/tauMass)
+            tofill['sorted_in_pt_pi_lv3_pt_norm_by_tauMass_m'] = (sorted_in_pt_pi_lv3_m.Pt()) * (1/tauMass)
+            
+#            print "sorted_in_pt_pi_lv1_p.p4():", sorted_in_pt_pi_lv1_p.p4()
+            
+            print "sorted_in_pt_pi_lv1_p.Px()", sorted_in_pt_pi_lv1_p.Px()
+            print "sorted_in_pt_pi_lv1_p.Py()",  sorted_in_pt_pi_lv1_p.Py()
+            print "sorted_in_pt_pi_lv1_p.Pz()", sorted_in_pt_pi_lv1_p.Pz()
+            print "sorted_in_pt_pi_lv1_p.E()", sorted_in_pt_pi_lv1_p.E()
+            
+            #Px,Py,Pz, M, E associated with tau + in global frame 
+            tofill["sorted_in_pt_pi_lv1_px_p"] = sorted_in_pt_pi_lv1_p.Px()
+            tofill["sorted_in_pt_pi_lv1_py_p"] = sorted_in_pt_pi_lv1_p.Py()
+            tofill["sorted_in_pt_pi_lv1_pz_p"] = sorted_in_pt_pi_lv1_p.Pz()
+            tofill["sorted_in_pt_pi_lv1_E_p"] = sorted_in_pt_pi_lv1_p.E()
+            tofill["sorted_in_pt_pi_lv1_mass_p"] = sorted_in_pt_pi_lv1_p.M()
+            
+            tofill["sorted_in_pt_pi_lv2_px_p"] = sorted_in_pt_pi_lv2_p.Px()
+            tofill["sorted_in_pt_pi_lv2_py_p"] = sorted_in_pt_pi_lv2_p.Py()
+            tofill["sorted_in_pt_pi_lv2_pz_p"] = sorted_in_pt_pi_lv2_p.Pz()
+            tofill["sorted_in_pt_pi_lv2_E_p"] = sorted_in_pt_pi_lv2_p.E()
+            tofill["sorted_in_pt_pi_lv2_mass_p"] = sorted_in_pt_pi_lv2_p.M()
+            
+            tofill["sorted_in_pt_pi_lv3_px_p"] = sorted_in_pt_pi_lv3_p.Px()
+            tofill["sorted_in_pt_pi_lv3_py_p"] = sorted_in_pt_pi_lv3_p.Py()
+            tofill["sorted_in_pt_pi_lv3_pz_p"] = sorted_in_pt_pi_lv3_p.Pz()
+            tofill["sorted_in_pt_pi_lv3_E_p"] = sorted_in_pt_pi_lv3_p.E()
+            tofill["sorted_in_pt_pi_lv3_mass_p"] = sorted_in_pt_pi_lv3_p.M()
+            
+            #Px, Py, Pz, M, E associated with tau - in global frame 
+            tofill["sorted_in_pt_pi_lv1_px_m"] = sorted_in_pt_pi_lv1_m.Px()
+            tofill["sorted_in_pt_pi_lv1_py_m"] = sorted_in_pt_pi_lv1_m.Py()
+            tofill["sorted_in_pt_pi_lv1_pz_m"] = sorted_in_pt_pi_lv1_m.Pz()
+            tofill["sorted_in_pt_pi_lv1_E_m"] = sorted_in_pt_pi_lv1_m.E()
+            tofill["sorted_in_pt_pi_lv1_mass_m"] = sorted_in_pt_pi_lv1_m.M()
+            
+            tofill["sorted_in_pt_pi_lv2_px_m"] = sorted_in_pt_pi_lv2_m.Px()
+            tofill["sorted_in_pt_pi_lv2_py_m"] = sorted_in_pt_pi_lv2_m.Py()
+            tofill["sorted_in_pt_pi_lv2_pz_m"] = sorted_in_pt_pi_lv2_m.Pz()
+            tofill["sorted_in_pt_pi_lv2_E_m"] = sorted_in_pt_pi_lv2_m.E()
+            tofill["sorted_in_pt_pi_lv2_mass_m"] = sorted_in_pt_pi_lv2_m.M()
+            
+            tofill["sorted_in_pt_pi_lv3_px_m"] = sorted_in_pt_pi_lv3_m.Px()
+            tofill["sorted_in_pt_pi_lv3_py_m"] = sorted_in_pt_pi_lv3_m.Py()
+            tofill["sorted_in_pt_pi_lv3_pz_m"] = sorted_in_pt_pi_lv3_m.Pz()
+            tofill["sorted_in_pt_pi_lv3_E_m"] = sorted_in_pt_pi_lv3_m.E()
+            tofill["sorted_in_pt_pi_lv3_mass_m"] = sorted_in_pt_pi_lv3_m.M()
+            
+  #           tofill["pi_plus_sorted_in_pt_1_hcalFraction"] = sorted_in_pt_pi_l
+#             tofill["pi_plus_sorted_in_pt_2_hcalFraction"]
+#             tofill["pi_plus_sorted_in_pt_3_hcalFraction"]
+#             tofill["pi_minus_sorted_in_pt_1_hcalFraction"]
+#             tofill["pi_minus_sorted_in_pt_2_hcalFraction"]
+#             tofill["pi_minus_sorted_in_pt_3_hcalFraction"]
+#             
+            
+            print  tofill["sorted_in_pt_pi_lv3_mass_m"]
+            
+            #toUse_local_pi_p_lv Px, Py, Pz, E, M
+            #some playing for my edification about locals()
+#             for thing in ('px', 'py', 'pz'): print thing
+
+            #Thanks to Riju I got this! although it ended up not to be the way I wanted to go. Leaving for posterity. Also yes, ended up not using the 1,2,3 stuff... 
+#             for thing, otherThing in zip(['Px', 'Py', 'Pz'], [1,2,3]): 
+#                 print tofill['toUse_local_pi_m_lv3_%s' %(thing.lower())]
+#                 tofill['toUse_local_pi_m_lv3_%s' %(thing)] = getattr(toUse_local_pi_m_lv3, "%s" %(thing))() #need the extra ()
+#                 print  getattr(toUse_local_pi_m_lv3, "%s" %(thing))
+#                 print  getattr(toUse_local_pi_m_lv3, "%s" %(thing))()
+#                 
+#                 #print tofill['toUse_local_pi_m_lv3_%s' %(thing.lower())]
+# #                print 
+# #             print locals()["tofill"]["toUse_local_pi_m_lv3_pz"]
+# #             #for i in ('Px', 'Py', 'Pz'):
+#             #    locals() ["tofill["var_%s' %(i"]]['var_%s' %(i)] = i
+            #toUse_local_pi_p stuff
+            tofill["toUse_local_pi_p_lv1_px"] = toUse_local_pi_p_lv1.Px()
+            tofill["toUse_local_pi_p_lv1_py"] = toUse_local_pi_p_lv1.Py()
+            tofill["toUse_local_pi_p_lv1_pz"] = toUse_local_pi_p_lv1.Pz()
+            tofill["toUse_local_pi_p_lv1_E"] = toUse_local_pi_p_lv1.E()
+            tofill["toUse_local_pi_p_lv1_mass"] = toUse_local_pi_p_lv1.M()
+            
+            tofill["toUse_local_pi_p_lv2_px"] = toUse_local_pi_p_lv2.Px()
+            tofill["toUse_local_pi_p_lv2_py"] = toUse_local_pi_p_lv2.Py()
+            tofill["toUse_local_pi_p_lv2_pz"] = toUse_local_pi_p_lv2.Pz()
+            tofill["toUse_local_pi_p_lv2_E"] = toUse_local_pi_p_lv2.E()
+            tofill["toUse_local_pi_p_lv2_mass"] = toUse_local_pi_p_lv2.M()
+            
+            tofill["toUse_local_pi_p_lv3_px"] = toUse_local_pi_p_lv3.Px()
+            tofill["toUse_local_pi_p_lv3_py"] = toUse_local_pi_p_lv3.Py()
+            tofill["toUse_local_pi_p_lv3_pz"] = toUse_local_pi_p_lv3.Pz()
+            tofill["toUse_local_pi_p_lv3_E"] = toUse_local_pi_p_lv3.E()
+            tofill["toUse_local_pi_p_lv3_mass"] = toUse_local_pi_p_lv3.M()
+            
+            #toUse_local_pi_m stuff 
+            tofill["toUse_local_pi_m_lv1_px"] = toUse_local_pi_m_lv1.Px()
+            tofill["toUse_local_pi_m_lv1_py"] = toUse_local_pi_m_lv1.Py()
+            tofill["toUse_local_pi_m_lv1_pz"] = toUse_local_pi_m_lv1.Pz()
+            tofill["toUse_local_pi_m_lv1_E"] = toUse_local_pi_m_lv1.E()
+            tofill["toUse_local_pi_m_lv1_mass"] = toUse_local_pi_m_lv1.M()
+            
+            tofill["toUse_local_pi_m_lv2_px"] = toUse_local_pi_m_lv2.Px()
+            tofill["toUse_local_pi_m_lv2_py"] = toUse_local_pi_m_lv2.Py()
+            tofill["toUse_local_pi_m_lv2_pz"] = toUse_local_pi_m_lv2.Pz()
+            tofill["toUse_local_pi_m_lv2_E"] = toUse_local_pi_m_lv2.E()
+            tofill["toUse_local_pi_m_lv2_mass"] = toUse_local_pi_m_lv2.M()
+            
+            tofill["toUse_local_pi_m_lv3_px"] = toUse_local_pi_m_lv3.Px()
+            tofill["toUse_local_pi_m_lv3_py"] = toUse_local_pi_m_lv3.Py()
+            tofill["toUse_local_pi_m_lv3_pz"] = toUse_local_pi_m_lv3.Pz()
+            tofill["toUse_local_pi_m_lv3_E"] = toUse_local_pi_m_lv3.E()
+            tofill["toUse_local_pi_m_lv3_mass"] = toUse_local_pi_m_lv3.M()
+            
+            
+            tofill["pi_plus_sorted_in_pt_1_pdgID"] = pi_plus_sorted_in_pt_1.pdgId()
+            tofill["pi_plus_sorted_in_pt_2_pdgID"] = pi_plus_sorted_in_pt_2.pdgId()
+            tofill["pi_plus_sorted_in_pt_3_pdgID"] = pi_plus_sorted_in_pt_3.pdgId()
+            tofill["pi_minus_sorted_in_pt_1_pdgID"] = pi_minus_sorted_in_pt_1.pdgId()
+            tofill["pi_minus_sorted_in_pt_2_pdgID"] = pi_minus_sorted_in_pt_2.pdgId()
+            tofill["pi_minus_sorted_in_pt_3_pdgID"] = pi_minus_sorted_in_pt_3.pdgId()
+            
+            tofill["pi_plus_sorted_in_pt_1_charge"] = pi_plus_sorted_in_pt_1.charge()
+            tofill["pi_plus_sorted_in_pt_2_charge"] = pi_plus_sorted_in_pt_2.charge()
+            tofill["pi_plus_sorted_in_pt_3_charge"] = pi_plus_sorted_in_pt_3.charge()
+            tofill["pi_minus_sorted_in_pt_1_charge"] = pi_minus_sorted_in_pt_1.charge()
+            tofill["pi_minus_sorted_in_pt_2_charge"] = pi_minus_sorted_in_pt_2.charge()
+            tofill["pi_minus_sorted_in_pt_3_charge"] = pi_minus_sorted_in_pt_3.charge()
+            
+            tofill["pi_plus_sorted_in_pt_1_hcalFraction"] = pi_plus_sorted_in_pt_1.hcalFraction()
+            tofill["pi_plus_sorted_in_pt_2_hcalFraction"] = pi_plus_sorted_in_pt_2.hcalFraction()
+            tofill["pi_plus_sorted_in_pt_3_hcalFraction"] = pi_plus_sorted_in_pt_3.hcalFraction()
+            tofill["pi_minus_sorted_in_pt_1_hcalFraction"] = pi_minus_sorted_in_pt_1.hcalFraction()
+            tofill["pi_minus_sorted_in_pt_2_hcalFraction"] = pi_minus_sorted_in_pt_2.hcalFraction()
+            tofill["pi_minus_sorted_in_pt_3_hcalFraction"] = pi_minus_sorted_in_pt_3.hcalFraction()
+            
+            tofill["pi_plus_sorted_in_pt_1_phiAtVtx"] = pi_plus_sorted_in_pt_1.phiAtVtx()
+            tofill["pi_plus_sorted_in_pt_2_phiAtVtx"] = pi_plus_sorted_in_pt_2.phiAtVtx()
+            tofill["pi_plus_sorted_in_pt_3_phiAtVtx"] = pi_plus_sorted_in_pt_3.phiAtVtx()
+            tofill["pi_minus_sorted_in_pt_1_phiAtVtx"] = pi_minus_sorted_in_pt_1.phiAtVtx()
+            tofill["pi_minus_sorted_in_pt_2_phiAtVtx"] = pi_minus_sorted_in_pt_2.phiAtVtx()
+            tofill["pi_minus_sorted_in_pt_3_phiAtVtx"] = pi_minus_sorted_in_pt_3.phiAtVtx()
+            
+            tofill["pi_plus_sorted_in_pt_1_phiAtVtxMinusPhi"] = pi_plus_sorted_in_pt_1.phiAtVtx() - pi_plus_sorted_in_pt_1.phi()
+            tofill["pi_plus_sorted_in_pt_2_phiAtVtxMinusPhi"] = pi_plus_sorted_in_pt_2.phiAtVtx() - pi_plus_sorted_in_pt_2.phi()
+            tofill["pi_plus_sorted_in_pt_3_phiAtVtxMinusPh"] = pi_plus_sorted_in_pt_3.phiAtVtx() - pi_plus_sorted_in_pt_3.phi()
+            tofill["pi_minus_sorted_in_pt_1_phiAtVtxMinusPhi"] = pi_minus_sorted_in_pt_1.phiAtVtx() - pi_minus_sorted_in_pt_1.phi()
+            tofill["pi_minus_sorted_in_pt_2_phiAtVtxMinusPhi"] = pi_minus_sorted_in_pt_2.phiAtVtx() - pi_minus_sorted_in_pt_2.phi()
+            tofill["pi_minus_sorted_in_pt_1_phiAtVtxMinusPhi"] = pi_minus_sorted_in_pt_3.phiAtVtx() - pi_minus_sorted_in_pt_3.phi()
+             
+            # tofill["pi_plus_sorted_in_pt_1_vertexRef"] = float(pi_plus_sorted_in_pt_1.vertexRef())
+#             tofill["pi_plus_sorted_in_pt_2_vertexRef"] = float(pi_plus_sorted_in_pt_2.vertexRef())
+#             tofill["pi_plus_sorted_in_pt_3_vertexRef"] = float(pi_plus_sorted_in_pt_3.vertexRef())
+#             tofill["pi_minus_sorted_in_pt_1_vertexRef"] = float(pi_minus_sorted_in_pt_1.vertexRef())
+#             tofill["pi_minus_sorted_in_pt_2_vertexRef"] = float(pi_minus_sorted_in_pt_2.vertexRef())
+#             tofill["pi_minus_sorted_in_pt_3_vertexRef"] = float(pi_minus_sorted_in_pt_3.vertexRef())
+
+#            print "(pi_plus_sorted_in_pt_1.vertexRef():", pi_plus_sorted_in_pt_1.vertexRef()
+ #           print "(pi_plus_sorted_in_pt_1.vertexRef().px():", pi_plus_sorted_in_pt_1.vertexRef().px()
+              
+            #print "(*pi_plus_sorted_in_pt_1.vertexRef():", *(pi_plus_sorted_in_pt_1.vertexRef())
+  #          print "pi_plus_sorted_in_pt_1.vertex().X():", pi_plus_sorted_in_pt_1.vertex().X()
+  
+            print "pi_plus_sorted_in_pt_1.pvAssociationQuality():",pi_plus_sorted_in_pt_1.pvAssociationQuality()
+            
+            #local pi object stuff
+            
+            tofill["pi_plus_sorted_in_local_pt_1_pdgID"] = pi_plus_sorted_in_local_pt_1.pdgId()
+            tofill["pi_plus_sorted_in_local_pt_2_pdgID"] = pi_plus_sorted_in_local_pt_2.pdgId()
+            tofill["pi_plus_sorted_in_local_pt_3_pdgID"] = pi_plus_sorted_in_local_pt_3.pdgId()
+            tofill["pi_minus_sorted_in_local_pt_1_pdgID"] = pi_minus_sorted_in_local_pt_1.pdgId()
+            tofill["pi_minus_sorted_in_local_pt_2_pdgID"] = pi_minus_sorted_in_local_pt_2.pdgId()
+            tofill["pi_minus_sorted_in_local_pt_3_pdgID"] = pi_minus_sorted_in_local_pt_3.pdgId()
+            
+            tofill["pi_plus_sorted_in_local_pt_1_charge"] = pi_plus_sorted_in_local_pt_1.charge()
+            tofill["pi_plus_sorted_in_local_pt_2_charge"] = pi_plus_sorted_in_local_pt_2.charge()
+            tofill["pi_plus_sorted_in_local_pt_3_charge"] = pi_plus_sorted_in_local_pt_3.charge()
+            tofill["pi_minus_sorted_in_local_pt_1_charge"] = pi_minus_sorted_in_local_pt_1.charge()
+            tofill["pi_minus_sorted_in_local_pt_2_charge"] = pi_minus_sorted_in_local_pt_2.charge()
+            tofill["pi_minus_sorted_in_local_pt_3_charge"] = pi_minus_sorted_in_local_pt_3.charge()
+            
+            tofill["pi_plus_sorted_in_local_pt_1_hcalFraction"] = pi_plus_sorted_in_local_pt_1.hcalFraction()
+            tofill["pi_plus_sorted_in_local_pt_2_hcalFraction"] = pi_plus_sorted_in_local_pt_2.hcalFraction()
+            tofill["pi_plus_sorted_in_local_pt_3_hcalFraction"] = pi_plus_sorted_in_local_pt_3.hcalFraction()
+            tofill["pi_minus_sorted_in_local_pt_1_hcalFraction"] = pi_minus_sorted_in_local_pt_1.hcalFraction()
+            tofill["pi_minus_sorted_in_local_pt_2_hcalFraction"] = pi_minus_sorted_in_local_pt_2.hcalFraction()
+            tofill["pi_minus_sorted_in_local_pt_3_hcalFraction"] = pi_minus_sorted_in_local_pt_3.hcalFraction()
+            
+            tofill["pi_plus_sorted_in_local_pt_1_phiAtVtx"] = pi_plus_sorted_in_local_pt_1.phiAtVtx()
+            tofill["pi_plus_sorted_in_local_pt_2_phiAtVtx"] = pi_plus_sorted_in_local_pt_2.phiAtVtx()
+            tofill["pi_plus_sorted_in_local_pt_3_phiAtVtx"] = pi_plus_sorted_in_local_pt_3.phiAtVtx()
+            tofill["pi_minus_sorted_in_local_pt_1_phiAtVtx"] = pi_minus_sorted_in_local_pt_1.phiAtVtx()
+            tofill["pi_minus_sorted_in_local_pt_2_phiAtVtx"] = pi_minus_sorted_in_local_pt_2.phiAtVtx()
+            tofill["pi_minus_sorted_in_local_pt_3_phiAtVtx"] = pi_minus_sorted_in_local_pt_3.phiAtVtx()
+            
+            tofill["pi_plus_sorted_in_local_pt_1_phiAtVtxMinusPhi"] = pi_plus_sorted_in_local_pt_1.phiAtVtx() - pi_plus_sorted_in_local_pt_1.phi()
+            tofill["pi_plus_sorted_in_local_pt_2_phiAtVtxMinusPhi"] = pi_plus_sorted_in_local_pt_2.phiAtVtx() -  pi_plus_sorted_in_local_pt_2.phi()
+            tofill["pi_plus_sorted_in_local_pt_3_phiAtVtxMinusPhi"] = pi_plus_sorted_in_local_pt_3.phiAtVtx() - pi_plus_sorted_in_local_pt_3.phi()
+            tofill["pi_minus_sorted_in_local_pt_1_phiAtVtxMinusPhi"] = pi_minus_sorted_in_local_pt_1.phiAtVtx() - pi_minus_sorted_in_local_pt_1.phi()
+            tofill["pi_minus_sorted_in_local_pt_2_phiAtVtxMinusPhi"] = pi_minus_sorted_in_local_pt_2.phiAtVtx() - pi_minus_sorted_in_local_pt_2.phi()
+            tofill["pi_minus_sorted_in_local_pt_3_phiAtVtxMinusPhi"] = pi_minus_sorted_in_local_pt_3.phiAtVtx() - pi_minus_sorted_in_local_pt_3.phi()
+             
+          
+            
              #actually fill tree
             ntuple.Fill(array('f', tofill.values()))      
              #print "candMatchPi2Info_tau_pdgID_plus_index_list is:", candMatchPi2Info_tau_pdgID_plus_index_list
@@ -1257,3 +1917,4 @@ print "h_den_gen_tau_pt_all_pdgID_plus_0to30pt.GetEntries() is:", h_den_gen_tau_
 
 ntuple.Write()
 file_out.Close()  
+
