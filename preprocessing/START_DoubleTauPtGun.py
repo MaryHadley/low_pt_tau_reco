@@ -681,6 +681,57 @@ branches.append("pi_minus_sorted_in_local_pt_2_phiAtVtxMinusPhi")
 branches.append("pi_minus_sorted_in_local_pt_3_phiAtVtxMinusPhi")
 
 
+#unrotation matrix elements as defined in email with scanned document from 23 aout 2020
+branches.append("m00_taup")
+branches.append("m01_taup")
+branches.append("m02_taup")
+branches.append("m10_taup")
+branches.append("m11_taup")
+branches.append("m12_taup")
+branches.append("m20_taup")
+branches.append("m21_taup")
+branches.append("m22_taup")
+
+branches.append("m00_taum")
+branches.append("m01_taum")
+branches.append("m02_taum")
+branches.append("m10_taum")
+branches.append("m11_taum")
+branches.append("m12_taum")
+branches.append("m20_taum")
+branches.append("m21_taum")
+branches.append("m22_taum")
+
+#input vector elements
+
+branches.append("in_00_antinu") #for use with taup
+branches.append("in_10_antinu")
+branches.append("in_20_antinu")
+
+branches.append("in_00_nu") #for use with taum
+branches.append("in_10_nu")
+branches.append("in_20_nu")
+
+#output vector elements
+
+branches.append("out_00_antinu")
+branches.append("out_10_antinu")
+branches.append("out_20_antinu")
+
+branches.append("out_00_nu")
+branches.append("out_10_nu")
+branches.append("out_20_nu")
+
+branches.append("first_eq_antinu")
+branches.append("second_eq_antinu")
+branches.append("third_eq_antinu")
+
+branches.append("first_eq_nu")
+branches.append("second_eq_nu")
+branches.append("third_eq_nu")
+
+
+
 
 ### End of long list of branches
 
@@ -1265,6 +1316,54 @@ for event in events:
             check4 = unrotateFromVisTauMomPointsAlongZAxis(orig_vis_taup_theta,orig_vis_taup_phi, check3)
             check4_mass = check4.M()
             
+            
+            
+            print "orig_vis_taup_theta:", orig_vis_taup_theta
+            print "orig_vis_taup_phi:", orig_vis_taup_phi
+            print "initial_leadPt_pi_p_in_AllInZFrame_phi:",initial_leadPt_pi_p_in_AllInZFrame_phi
+            m00_taup = (-np.sin(orig_vis_taup_phi) * np.cos(initial_leadPt_pi_p_in_AllInZFrame_phi)) - (np.cos(orig_vis_taup_theta)*np.cos(orig_vis_taup_phi) * np.sin(initial_leadPt_pi_p_in_AllInZFrame_phi))
+            m01_taup = (np.sin(orig_vis_taup_phi) * np.sin(initial_leadPt_pi_p_in_AllInZFrame_phi)) - (np.cos(orig_vis_taup_theta)*np.cos(orig_vis_taup_phi) * np.cos(initial_leadPt_pi_p_in_AllInZFrame_phi))
+            m02_taup = np.sin(orig_vis_taup_theta) * np.cos(orig_vis_taup_phi)
+            m10_taup = (np.cos(orig_vis_taup_phi) * np.cos(initial_leadPt_pi_p_in_AllInZFrame_phi)) - (np.cos(orig_vis_taup_theta)*np.sin(orig_vis_taup_phi) * np.sin(initial_leadPt_pi_p_in_AllInZFrame_phi))
+            m11_taup = (-np.cos(orig_vis_taup_phi) * np.sin(initial_leadPt_pi_p_in_AllInZFrame_phi)) - (np.cos(orig_vis_taup_theta) * np.sin(orig_vis_taup_phi) * np.cos(initial_leadPt_pi_p_in_AllInZFrame_phi))
+            m12_taup = np.sin(orig_vis_taup_theta) * np.sin(orig_vis_taup_phi)
+            m20_taup = np.sin(orig_vis_taup_theta) * np.sin(initial_leadPt_pi_p_in_AllInZFrame_phi)
+            m21_taup = np.sin(orig_vis_taup_theta) * np.cos(initial_leadPt_pi_p_in_AllInZFrame_phi)
+            m22_taup = np.cos(orig_vis_taup_theta)
+            
+            print "m00_taup:", m00_taup
+            print "m01_taup:", m01_taup
+            print "m02_taup:", m02_taup
+            print "m10_taup:", m10_taup
+            print "m11_taup:", m11_taup
+            print "m12_taup:", m12_taup
+            print "m20_taup:", m20_taup
+            print "m21_taup:", m21_taup
+            print "m22_taup:", m22_taup
+            
+            in_00_antinu = toUse_local_antineu_lv_pt * np. cos(toUse_local_antineu_lv_phi)
+            in_10_antinu = toUse_local_antineu_lv_pt * np.sin(toUse_local_antineu_lv_phi)
+            in_20_antinu = toUse_local_antineu_lv_pt * (1/np.tan(toUse_local_antineu_lv_theta))
+            
+            print "in_00_antinu:", in_00_antinu
+            print "in_10_antinu:", in_10_antinu
+            print "in_20_antinu:", in_20_antinu
+            
+            
+            out_00_antinu = antineu_lv.Pt() * np.cos(antineu_lv.Phi())
+            out_10_antinu = antineu_lv.Pt() * np.sin(antineu_lv.Phi())
+            out_20_antinu = antineu_lv.Pt() * (1/np.tan(antineu_lv.Theta()))
+            
+            print "out_00_antinu:", out_00_antinu
+            print "out_10_antinu:", out_10_antinu
+            print "out_20_antinu:", out_20_antinu
+            
+            first_eq_antinu = (m00_taup * in_00_antinu) + (m01_taup * in_10_antinu) +(m02_taup * in_20_antinu)
+            second_eq_antinu = (m10_taup * in_00_antinu) + (m11_taup * in_10_antinu) + (m12_taup * in_20_antinu)
+            third_eq_antinu = (m20_taup * in_00_antinu) + (m21_taup * in_10_antinu) + (m22_taup * in_20_antinu)
+
+
+            
            
 
             
@@ -1423,9 +1522,51 @@ for event in events:
              #print "#################"
              #print "dir(pi_plus1) is:", dir(pi_plus1)
              #print "pi_plus1.numberOfMothers() is:", pi_plus1.numberOfMothers()
+            
              
-             
-             
+            print "orig_vis_taum_theta:", orig_vis_taum_theta
+            print "orig_vis_taum_phi:", orig_vis_taum_phi
+            print "initial_leadPt_pi_m_in_AllInZFrame_phi:",initial_leadPt_pi_m_in_AllInZFrame_phi
+            m00_taum = (-np.sin(orig_vis_taum_phi) * np.cos(initial_leadPt_pi_m_in_AllInZFrame_phi)) - (np.cos(orig_vis_taum_theta)*np.cos(orig_vis_taum_phi) * np.sin(initial_leadPt_pi_m_in_AllInZFrame_phi))
+            m01_taum = (np.sin(orig_vis_taum_phi) * np.sin(initial_leadPt_pi_m_in_AllInZFrame_phi)) - (np.cos(orig_vis_taum_theta)*np.cos(orig_vis_taum_phi) * np.cos(initial_leadPt_pi_m_in_AllInZFrame_phi))
+            m02_taum = np.sin(orig_vis_taum_theta) * np.cos(orig_vis_taum_phi)
+            m10_taum = (np.cos(orig_vis_taum_phi) * np.cos(initial_leadPt_pi_m_in_AllInZFrame_phi)) - (np.cos(orig_vis_taum_theta)*np.sin(orig_vis_taum_phi) * np.sin(initial_leadPt_pi_m_in_AllInZFrame_phi))
+            m11_taum = (-np.cos(orig_vis_taum_phi) * np.sin(initial_leadPt_pi_m_in_AllInZFrame_phi)) - (np.cos(orig_vis_taum_theta) * np.sin(orig_vis_taum_phi) * np.cos(initial_leadPt_pi_m_in_AllInZFrame_phi))
+            m12_taum = np.sin(orig_vis_taum_theta) * np.sin(orig_vis_taum_phi)
+            m20_taum = np.sin(orig_vis_taum_theta) * np.sin(initial_leadPt_pi_m_in_AllInZFrame_phi)
+            m21_taum = np.sin(orig_vis_taum_theta) * np.cos(initial_leadPt_pi_m_in_AllInZFrame_phi)
+            m22_taum = np.cos(orig_vis_taum_theta)
+            
+            print "m00_taum:", m00_taum
+            print "m01_taum:", m01_taum
+            print "m02_taum:", m02_taum
+            print "m10_taum:", m10_taum
+            print "m11_taum:", m11_taum
+            print "m12_taum:", m12_taum
+            print "m20_taum:", m20_taum
+            print "m21_taum:", m21_taum
+            print "m22_taum:", m22_taum 
+            
+            in_00_nu = toUse_local_neu_lv_pt * np. cos(toUse_local_neu_lv_phi)
+            in_10_nu = toUse_local_neu_lv_pt * np.sin(toUse_local_neu_lv_phi)
+            in_20_nu = toUse_local_neu_lv_pt * (1/np.tan(toUse_local_neu_lv_theta))
+            
+            print "in_00_nu:", in_00_nu
+            print "in_10_nu:", in_10_nu
+            print "in_20_nu:", in_20_nu
+            
+            
+            out_00_nu = neu_lv.Pt() * np.cos(neu_lv.Phi())
+            out_10_nu = neu_lv.Pt() * np.sin(neu_lv.Phi())
+            out_20_nu = neu_lv.Pt() * (1/np.tan(neu_lv.Theta()))
+            
+            print "out_00_nu:", out_00_nu
+            print "out_10_nu:", out_10_nu
+            print "out_20_nu:", out_20_nu
+            
+            first_eq_nu = (m00_taum * in_00_nu) + (m01_taum * in_10_nu) +(m02_taum * in_20_nu)
+            second_eq_nu = (m10_taum * in_00_nu) + (m11_taum * in_10_nu) + (m12_taum * in_20_nu)
+            third_eq_nu = (m20_taum * in_00_nu) + (m21_taum * in_10_nu) + (m22_taum * in_20_nu)
              
              
              
@@ -1836,6 +1977,53 @@ for event in events:
             tofill["pi_minus_sorted_in_local_pt_1_phiAtVtxMinusPhi"] = pi_minus_sorted_in_local_pt_1.phiAtVtx() - pi_minus_sorted_in_local_pt_1.phi()
             tofill["pi_minus_sorted_in_local_pt_2_phiAtVtxMinusPhi"] = pi_minus_sorted_in_local_pt_2.phiAtVtx() - pi_minus_sorted_in_local_pt_2.phi()
             tofill["pi_minus_sorted_in_local_pt_3_phiAtVtxMinusPhi"] = pi_minus_sorted_in_local_pt_3.phiAtVtx() - pi_minus_sorted_in_local_pt_3.phi()
+            
+            
+            tofill["m00_taup"] = m00_taup
+            tofill["m01_taup"] = m01_taup 
+            tofill["m02_taup"] = m02_taup
+            tofill["m10_taup"] = m10_taup
+            tofill["m11_taup"] = m11_taup
+            tofill["m12_taup"] = m12_taup
+            tofill["m20_taup"] = m20_taup
+            tofill["m21_taup"] = m21_taup
+            tofill["m22_taup"] = m22_taup
+            
+            
+            tofill["m00_taum"] = m00_taum
+            tofill["m01_taum"] = m01_taum
+            tofill["m02_taum"] = m02_taum
+            tofill["m10_taum"] = m10_taum
+            tofill["m11_taum"] = m11_taum
+            tofill["m12_taum"] = m12_taum
+            tofill["m20_taum"] = m20_taum
+            tofill["m21_taum"] = m21_taum
+            tofill["m22_taum"] = m22_taum
+            
+            
+            tofill["in_00_antinu"] = in_00_antinu
+            tofill["in_10_antinu"] = in_10_antinu
+            tofill["in_20_antinu"] = in_20_antinu
+            tofill["in_00_nu"] = in_00_nu
+            tofill["in_10_nu"] = in_10_nu
+            tofill["in_20_nu"] = in_20_nu
+
+            tofill["out_00_antinu"] = out_00_antinu
+            tofill["out_10_antinu"] = out_10_antinu
+            tofill["out_20_antinu"] = out_20_antinu
+            tofill["out_00_nu"] = out_00_nu
+            tofill["out_10_nu"] = out_10_nu
+            tofill["out_20_nu"] = out_20_nu
+            
+            tofill["first_eq_antinu"] = first_eq_antinu
+            tofill["second_eq_antinu"] = second_eq_antinu
+            tofill["third_eq_antinu"] = third_eq_antinu 
+            
+            tofill["first_eq_nu"] = first_eq_nu
+            tofill["second_eq_nu"] = second_eq_nu
+            tofill["third_eq_nu"] = third_eq_nu 
+            
+            
              
           
             
